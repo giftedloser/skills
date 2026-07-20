@@ -1,0 +1,7 @@
+interface:
+  display_name: Check Security
+  short_description: Audit-only. Scoped security audit separating exploitable defects from theoretical hardening.
+  default_prompt: Use $check-sec to audit this repository for practical security defects and unsafe trust assumptions.
+
+policy:
+  allow_implicit_invocation: false

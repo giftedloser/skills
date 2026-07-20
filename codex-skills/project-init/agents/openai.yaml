@@ -1,0 +1,7 @@
+interface:
+  display_name: Project Init
+  short_description: Initialize or normalize a project without destroying existing work. Only skill allowed to mutate a project.
+  default_prompt: Use $project-init to scaffold a new project or normalize this repository.
+
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,7 @@
+interface:
+  display_name: Check Performance
+  short_description: Audit-only. Measured performance audit. No finding above MEDIUM without a number.
+  default_prompt: Use $check-performance to audit performance with measured evidence.
+
+policy:
+  allow_implicit_invocation: false
