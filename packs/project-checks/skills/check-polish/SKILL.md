@@ -55,7 +55,7 @@ Contract report structure (with `NOT APPLICABLE` available), plus per finding th
 
 ---
 
-## Audit Contract (shared, identical across all check skills)
+## Audit Contract
 
 **Audit-only.** This skill never: edits source files, repairs findings, installs dependencies, commits, pushes, publishes, deploys, changes configuration, or claims something works without executed evidence. If a fix is obvious, it goes in the remediation prompt, not into the repo.
 

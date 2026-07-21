@@ -9,6 +9,8 @@
 
 GiftedLoser Skills is a growing collection of personal, on-demand Codex workflows. The first pack helps turn an uncertain idea into a well-formed project. The second checks whether the resulting work is correct, real, safe, fast, polished, and ready to release.
 
+These skills are built for Codex and are not currently compatible with Claude Code or other agent runtimes.
+
 These skills are intentionally composable. Install the complete collection or only the pack that solves your current problem.
 
 ## From idea to release
@@ -63,6 +65,9 @@ Its only project mutation is an approved `docs/PROJECT.md` with one status:
 
 Download and extract the desired ZIP, then copy the contained skill folders into your personal Codex skills directory.
 
+> [!WARNING]
+> These commands overwrite installed skills with the same folder names. Back up any local modifications first.
+
 ### Windows PowerShell
 
 ```powershell
@@ -81,6 +86,13 @@ Start a fresh Codex task after installation so the skill catalog reloads. Every 
 
 ```text
 $new-idea
+```
+
+## Rebuilding distribution ZIPs
+
+```powershell
+.\scripts\build-dist.ps1        # rebuild all three ZIPs
+.\scripts\build-dist.ps1 -Check # fail when a committed ZIP is stale
 ```
 
 ## Operating model
@@ -111,6 +123,8 @@ skills/
 │   ├── GiftedLoser-Project-Start.zip
 │   ├── GiftedLoser-Project-Checks.zip
 │   └── GiftedLoser-Skills-Complete.zip
+├── scripts/
+│   └── build-dist.ps1
 └── README.md
 ```
 
