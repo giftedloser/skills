@@ -5,7 +5,7 @@ description: Initialize a new software project from an empty directory or normal
 
 # project-init
 
-Initialize a new software project from an empty directory, or normalize an existing repository, without destroying valid work. This is the **only skill in the suite permitted to mutate a project by default.** It never modifies global Codex configuration, approval rules, global agents, or user-managed files above the repository root. Repository-local dependency operations may use the package manager's normal external cache, but never install global packages or change global package-manager configuration unless explicitly requested.
+Initialize a new software project from an empty directory, or normalize an existing repository, without destroying valid work. This is the **only skill in this repository permitted to scaffold or mutate implementation by default**; `$new-idea` may write only `docs/PROJECT.md`. It never modifies global Codex configuration, approval rules, global agents, or user-managed files above the repository root. Repository-local dependency operations may use the package manager's normal external cache, but never install global packages or change global package-manager configuration unless explicitly requested.
 
 ## Inputs
 
@@ -16,6 +16,18 @@ Determine from the request and the directory itself: project goal, target platfo
 When the user asks for a plan, simulation, dry run, or read-only review, inspect safely and describe the exact proposed files, commands, Git actions, and verification without performing them. Label unexecuted commands and outcomes as proposed or unverified. Otherwise, perform the requested initialization normally.
 
 ## Workflow
+
+### 0. Optional project handoff
+
+Look for `docs/PROJECT.md`, then `PROJECT.md`, before planning or asking questions. If neither exists, use the current request and directory exactly as normal; `$new-idea` is optional. If both exist and materially differ, stop and ask which is authoritative.
+
+When a handoff exists, read it fully and use it as the approved product intent while continuing to verify technical claims against repository reality. Apply its status deterministically:
+
+- `READY FOR PROJECT-INIT` — proceed, asking only about material conflicts or missing implementation decisions.
+- `NEEDS DECISIONS` — resolve the named blocking decisions before changing the project.
+- `DO NOT BUILD YET` — stop initialization and report the stated blockers.
+
+Surface contradictions between the handoff, user request, and existing repository before changing files. Never silently rewrite the handoff's scope or decisions.
 
 ### 1. Inspect
 
@@ -35,7 +47,7 @@ Organize files by lifecycle, not by who created them. Preserve equivalent establ
 
 ### 4. AGENTS.md
 
-Create or improve the repository AGENTS.md with only real, verified content: project purpose, actual stack, important architecture, real build/test/lint/type-check/format/dev commands, packaging or release command when applicable, constraints, file-placement and scratch conventions, caution areas, definition of done, verification expectations. Every command listed must exist and be verified in step 6. No generic filler — if a section would be boilerplate, omit it.
+Create or improve the repository AGENTS.md with only real, verified content: project purpose, actual stack, important architecture, real build/test/lint/type-check/format/dev commands, packaging or release command when applicable, constraints, file-placement and scratch conventions, caution areas, definition of done, verification expectations. When a project handoff exists, identify it as the product source of truth and require implementation tasks to read it without duplicating the full document. Every command listed must exist and be verified in step 6. No generic filler — if a section would be boilerplate, omit it.
 
 ### 5. Repo-local Codex config (only when justified)
 
@@ -59,11 +71,11 @@ Confirm the structure builds/parses at the shallowest meaningful level (e.g., de
 
 ## Output
 
-Report: detected prior state, files created, files changed, stack and tooling selected, Git state, GitHub state, commands verified, checks passed, unresolved decisions, real residual risks. One line pointing to `$check-work` for behavioral verification.
+Report: detected prior state, project handoff used or absent, files created, files changed, stack and tooling selected, Git state, GitHub state, commands verified, checks passed, unresolved decisions, real residual risks. One line pointing to `$check-work` for behavioral verification.
 
 ## Completion criteria
 
-Structure matches the goal, existing work preserved, AGENTS.md contains only real verified instructions, no invented commands, no global Codex changes, failures clearly reported.
+Structure matches the goal and any approved handoff, blocking handoff status was respected, existing work preserved, AGENTS.md contains only real verified instructions, no invented commands, no global Codex changes, failures clearly reported.
 
 ## Subagents
 
