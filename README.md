@@ -5,6 +5,7 @@
 ![Skills](https://img.shields.io/badge/skills-9-6d5dfc)
 ![Packs](https://img.shields.io/badge/packs-2-167d68)
 ![Invocation](https://img.shields.io/badge/invocation-explicit-3974c6)
+[![License: MIT](https://img.shields.io/badge/license-MIT-c47716)](LICENSE)
 
 GiftedLoser Skills is a growing collection of personal, on-demand Codex workflows. The first pack helps turn an uncertain idea into a well-formed project. The second checks whether the resulting work is correct, real, safe, fast, polished, and ready to release.
 
