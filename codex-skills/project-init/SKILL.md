@@ -31,9 +31,11 @@ Never overwrite working source. Never replace established conventions without ev
 
 **Existing project:** retain current architecture unless clearly broken or incompatible with the stated goal. Fill genuine setup gaps only. No redesign without justification stated to the user.
 
+Organize files by lifecycle, not by who created them. Preserve equivalent established paths; otherwise use ignored `scratch/` for disposable work, ignored `html-mocks/` for temporary HTML prototypes, and ignored tool-native output paths or `artifacts/test-results/` for generated test evidence. Promote intentional references to tracked locations such as `docs/mocks/` or `docs/reports/`; keep durable project files such as `CHANGELOG.md` tracked.
+
 ### 4. AGENTS.md
 
-Create or improve the repository AGENTS.md with only real, verified content: project purpose, actual stack, important architecture, real build/test/lint/type-check/format/dev commands, packaging or release command when applicable, constraints, conventions, caution areas, definition of done, verification expectations. Every command listed must exist and be verified in step 6. No generic filler — if a section would be boilerplate, omit it.
+Create or improve the repository AGENTS.md with only real, verified content: project purpose, actual stack, important architecture, real build/test/lint/type-check/format/dev commands, packaging or release command when applicable, constraints, file-placement and scratch conventions, caution areas, definition of done, verification expectations. Every command listed must exist and be verified in step 6. No generic filler — if a section would be boilerplate, omit it.
 
 ### 5. Repo-local Codex config (only when justified)
 
@@ -45,7 +47,7 @@ Derive commands from package files, manifests, task files, CI, and docs. Verify 
 
 ### 7. Git
 
-For an empty directory or newly initialized repository: initialize Git when needed, choose an appropriate initial branch, add a sensible `.gitignore`, inspect changes before staging, and create the initial commit. For an existing repository: preserve its history, branch, and remotes; do not create an "initial" or normalization commit unless explicitly requested. Never add or change a remote, push, publish, or deploy unless explicitly requested.
+For an empty directory or newly initialized repository: initialize Git when needed, choose an appropriate initial branch, add a sensible `.gitignore`, inspect changes before staging, and create the initial commit. For an existing repository: preserve its history, branch, remotes, and existing ignore rules; add only missing project-appropriate rules and do not create an "initial" or normalization commit unless explicitly requested. Ensure local environment files, disposable scratch and HTML mocks, generated test results, build output, caches, and editor/OS debris are ignored without hiding source, durable documentation, changelogs, or release assets. Check for files already tracked despite the ignore policy; report them and get explicit approval before removing them from the index. Never add or change a remote, push, publish, or deploy unless explicitly requested.
 
 ### 8. GitHub
 

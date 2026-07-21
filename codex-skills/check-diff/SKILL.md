@@ -27,17 +27,19 @@ Never fetch, pull, switch branches, or change repository state to manufacture a 
 **User-visible impact:** behavior that no longer matches the stated goal, tests, documentation, or established product behavior.
 **Verification:** missing or weakened tests for meaningful changed behavior, checks that do not exercise production paths, failing focused checks.
 **Change quality:** unnecessary complexity, duplication, dead code, or speculative abstraction introduced by the diff when it creates concrete maintenance or correctness risk. Style-only preferences are not findings.
+**Repository hygiene:** accidental secrets or local environment files, scratch work, temporary HTML mocks, generated test output, build/cache/editor/OS debris, unexpected binaries, weakened ignore rules, or durable docs and reports placed outside the repository's established structure. Distinguish intentional tracked artifacts from disposable output.
 
 ## Workflow
 
 1. Read repository instructions and inspect `git status`, branch state, and the selected diff without changing them.
 2. State the exact baseline, target, and inclusion of committed, staged, unstaged, and untracked work.
 3. Read the complete diff before forming findings.
-4. Inspect enough surrounding callers, callees, tests, types, configuration, and history to understand changed behavior. Root-cause review is in scope; unrelated repository auditing is not.
-5. Trace changed inputs through outputs, side effects, persistence, and failure paths.
-6. Run the narrowest existing tests, type checks, lint, build, or focused reproduction that can confirm or reject suspected defects. Never install dependencies or modify code to make checks pass.
-7. Report only defects introduced or materially exposed by the selected change. Mention a pre-existing issue only when it blocks evaluation, label it out of scope, and leave broad follow-up to `$check-code`.
-8. Inspect repository state after validation and report any generated artifacts or changes.
+4. Compare changed and relevant untracked paths with repository placement and ignore policy; use Git ignore diagnostics when needed.
+5. Inspect enough surrounding callers, callees, tests, types, configuration, and history to understand changed behavior. Root-cause review is in scope; unrelated repository auditing is not.
+6. Trace changed inputs through outputs, side effects, persistence, and failure paths.
+7. Run the narrowest existing tests, type checks, lint, build, or focused reproduction that can confirm or reject suspected defects. Never install dependencies or modify code to make checks pass.
+8. Report only defects introduced or materially exposed by the selected change. Mention a pre-existing issue only when it blocks evaluation, label it out of scope, and leave broad follow-up to `$check-code`.
+9. Inspect repository state after validation and report any generated artifacts or changes.
 
 ## Evidence and coverage
 

@@ -1,6 +1,6 @@
 ---
 name: check-release
-description: Determine whether a product can be reliably built, packaged, installed, launched, updated, and removed by a real user. Use when the user explicitly invokes $check-release or requests this named release-readiness audit; provide a GO or NO-GO decision without publishing or deploying.
+description: Determine whether a repository and product are ready for release, including documentation, versioning, build, packaging, installation, launch, update, and removal. Use when the user explicitly invokes $check-release or requests this named release-readiness audit; provide a GO or NO-GO decision without publishing or deploying.
 ---
 
 # check-release
@@ -19,6 +19,7 @@ Run builds in a disposable copy, temporary worktree, or isolated output director
 
 **Build:** clean-checkout build, release configuration, compiler warnings, missing generated files, environment assumptions, reproducibility.
 **Versioning:** package/application/installer version agreement, release metadata, changelog consistency, artifact naming.
+**Repository surface:** accurate description and README, verified installation and usage instructions, current documentation, links and screenshots, license and compatibility information when applicable, intentional layout, and absence of accidental scratch, local configuration, or generated test output.
 **Packaging:** installer, portable build, archive contents, required runtime files, missing assets, platform and architecture targets.
 **Installation:** permissions, elevation, install path, shortcuts, file associations, registry, services, first launch.
 **Upgrade:** settings and data migration, backward compatibility, rollback, failed-upgrade recovery, stale files.
@@ -30,16 +31,19 @@ Run builds in a disposable copy, temporary worktree, or isolated output director
 
 1. Identify the intended distribution method.
 2. Inspect version and packaging configuration; verify version agreement across package, app, installer, and metadata.
-3. Run a clean release build (fresh clone or clean working tree) when possible.
-4. Inspect produced artifacts; verify required files are bundled.
-5. Portable-launch the artifact from a disposable location.
-6. Inspect (per the safety restriction) install, upgrade, migration, and uninstall behavior.
-7. Review release automation without triggering it.
-8. Identify platform-specific risks.
+3. Review the repository surface and verify user-facing setup, usage, compatibility, changelog, and release documentation against the current product.
+4. Run a clean release build (fresh clone or clean working tree) when possible.
+5. Inspect produced artifacts; verify required files are bundled.
+6. Portable-launch the artifact from a disposable location.
+7. Inspect (per the safety restriction) install, upgrade, migration, and uninstall behavior.
+8. Review release automation without triggering it.
+9. Identify platform-specific risks.
 
 ## Release blockers
 
 Treat these as common blockers: the intended artifact cannot be built or packaged from the current source; required files are missing; the artifact cannot launch through the intended user path; version or architecture metadata would misidentify the artifact; required upgrade, data-preservation, or removal behavior fails; signing or policy requirements prevent intended users from running it; or a required primary release verification remains unresolved.
+
+Treat repository-surface issues as blockers only when they materially mislead users about installation, usage, compatibility, licensing, version, or artifact selection. Cosmetic presentation issues are non-blocking.
 
 For portable-only products, verify archive contents and integrity, extraction to a disposable directory, launch as a standard user outside the build tree, settings and data location, replacement-style upgrade, shutdown, removal by deleting application files, and the documented treatment of retained user data. Do not invent installer, registry, service, shortcut, or file-association requirements the product does not claim.
 
