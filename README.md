@@ -15,6 +15,10 @@ These skills are intentionally composable. Install the complete collection or on
 
 ## From idea to release
 
+
+<img width="504" height="1051" alt="image (3)" src="https://github.com/user-attachments/assets/9bbd7530-be62-4e1f-bd86-ee2db22cb228" />
+
+
 ![Project lifecycle from idea to release](assets/project-lifecycle.svg)
 
 You do not need to run every check on every change. Choose the confidence checks that match the project's actual risks.
