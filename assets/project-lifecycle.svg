@@ -110,12 +110,18 @@
 
   <path class="edge" d="M335 388V430"/>
 
-  <rect class="node polish" x="230" y="430" width="210" height="96" rx="12"/>
-  <text x="335" y="470"><tspan class="skill n-polish" x="335">$repo-polisher</tspan><tspan class="detail" x="335" dy="24">README, badges, metadata</tspan></text>
 
-  <path class="edge" d="M440 478H490"/>
-  <rect class="node gate" x="490" y="430" width="300" height="96" rx="12"/>
-  <text x="640" y="470"><tspan class="skill n-gate" x="640">$check-release</tspan><tspan class="detail" x="640" dy="24">Docs, build, install, signing</tspan></text>
+  <rect class="node gate" x="230" y="430" width="300" height="96" rx="12"/>
+  <text x="380" y="470"><tspan class="skill n-gate" x="380">$check-release</tspan><tspan class="detail" x="380" dy="24">Docs, build, install, signing</tspan></text>
+
+  <path class="edge" d="M530 478H580"/>
+  <rect class="node polish" x="580" y="430" width="210" height="96" rx="12"/>
+  <text x="685" y="470"><tspan class="skill n-polish" x="685">$repo-polisher</tspan><tspan class="detail" x="685" dy="24">README, badges, metadata</tspan></text>
+
+  <path class="edge" d="M790 478H840"/>
+  <rect class="node release" x="840" y="430" width="200" height="96" rx="12"/>
+  <text x="940" y="470"><tspan class="step n-release" x="940">Release</tspan><tspan class="detail" x="940" dy="24">Ship with evidence</tspan></text>
+
 
   <path class="edge" d="M790 478H840"/>
   <rect class="node release" x="840" y="430" width="200" height="96" rx="12"/>
