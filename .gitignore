@@ -1,0 +1,14 @@
+# Local editor and operating-system files
+.DS_Store
+Desktop.ini
+Thumbs.db
+.idea/
+.vscode/
+
+# Python cache files created by local validation
+__pycache__/
+*.py[cod]
+
+# Local logs and temporary files
+*.log
+*.tmp
