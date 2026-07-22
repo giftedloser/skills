@@ -40,7 +40,7 @@ The pack ZIPs remain available when you want only one part:
 
 | You are thinking... | Use | What you get |
 |---|---|---|
-| “Is this idea actually worth building?” | `$new-idea` | A candid review of value, contradictions, gaps, scope, feasibility, risks, and experience direction, ending in `docs/PROJECT.md` |
+| “Is this idea worth building?” | `$new-idea` | A review of value, contradictions, gaps, scope, feasibility, risks, and experience direction, ending in `docs/PROJECT.md` |
 | “Set this project up properly.” | `$project-init` | A clean foundation with verified commands, repository instructions, structure, Git hygiene, and safe defaults |
 | “Review what I just changed.” | `$check-diff` | A focused review of change-caused defects, regressions, accidental files, and missing verification |
 | “Does this actually work?” | `$check-work` | Real end-to-end product workflows executed from the user's perspective |
@@ -48,8 +48,9 @@ The pack ZIPs remain available when you want only one part:
 | “Could someone misuse or break this?” | `$check-sec` | Practical security defects, unsafe trust assumptions, and clearly separated hardening advice |
 | “Why is this slow?” | `$check-performance` | Measured bottlenecks, expected benefits, and exact measurements to rerun after fixes |
 | “Does the interface feel finished?” | `$check-polish` | Real UI testing for visual quality, interaction, responsiveness, accessibility, and platform behavior |
-| “Can I confidently ship this?” | `$check-release` | A GO, GO WITH RISKS, NO-GO, or unavailable decision covering docs, versions, build, packaging, installation, upgrades, signing, and removal |
-| “Make this repository look credible and complete.” | `$repo-polisher` | Evidence-backed identity, README craft, diagrams, badges, templates, metadata, and repository presentation |
+| “Can I ship this?” | `$check-release` | A GO, GO WITH RISKS, NO-GO, or unavailable decision covering docs, versions, build, packaging, installation, upgrades, signing, and removal |
+| “Make this repository look complete.” | `$repo-polisher` | Repository identity, README craft, diagrams, badges, templates, and metadata, grounded in evidence |
+
 
 ## The project handoff
 
