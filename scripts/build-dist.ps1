@@ -45,6 +45,7 @@ function New-SkillsArchive {
 
             foreach ($item in ($files | Sort-Object Entry)) {
                 $entry = $zip.CreateEntry($item.Entry, [System.IO.Compression.CompressionLevel]::Optimal)
+                $entry.LastWriteTime = [DateTimeOffset]::new(1980, 1, 1, 0, 0, 0, [TimeSpan]::Zero)
                 $input = $item.File.OpenRead()
                 $output = $entry.Open()
                 try { $input.CopyTo($output) }
