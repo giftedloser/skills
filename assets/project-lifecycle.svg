@@ -105,11 +105,10 @@
   <path class="branch" d="M1072 350V388"/>
   <path class="branch" d="M128 388H1072"/>
 
-  <text class="group" x="250" y="422">POLISH</text>
-  <text class="group" x="520" y="422">SHIP</text>
+  <text class="group" x="380" y="422">SHIP</text>
+  <text class="group" x="685" y="422">POLISH</text>
 
-  <path class="edge" d="M335 388V430"/>
-
+  <path class="edge" d="M380 388V430"/>
 
   <rect class="node gate" x="230" y="430" width="300" height="96" rx="12"/>
   <text x="380" y="470"><tspan class="skill n-gate" x="380">$check-release</tspan><tspan class="detail" x="380" dy="24">Docs, build, install, signing</tspan></text>
@@ -117,6 +116,10 @@
   <path class="edge" d="M530 478H580"/>
   <rect class="node polish" x="580" y="430" width="210" height="96" rx="12"/>
   <text x="685" y="470"><tspan class="skill n-polish" x="685">$repo-polisher</tspan><tspan class="detail" x="685" dy="24">README, badges, metadata</tspan></text>
+
+  <path class="edge" d="M790 478H840"/>
+  <rect class="node release" x="840" y="430" width="200" height="96" rx="12"/>
+  <text x="940" y="470"><tspan class="step n-release" x="940">Release</tspan><tspan class="detail" x="940" dy="24">Ship with evidence</tspan></text>
 
   <path class="edge" d="M790 478H840"/>
   <rect class="node release" x="840" y="430" width="200" height="96" rx="12"/>
