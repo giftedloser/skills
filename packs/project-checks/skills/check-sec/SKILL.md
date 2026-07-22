@@ -21,20 +21,31 @@ Before auditing, identify which categories below actually apply to this reposito
 **Supply chain:** unsafe dependency sources, mutable remote execution, unpinned tooling, install scripts, abandoned or vulnerable dependencies, package confusion, insecure release pipelines.
 **Desktop/local:** arbitrary command execution, unsafe path construction, writable privileged locations, insecure temp files, symlink/junction issues, unsafe updaters, untrusted plugin loading.
 **Logging/privacy:** sensitive logs, excessive telemetry, personal data handling, credential exposure in errors.
+**Credential lifecycle:** observable handling through command-line arguments, inherited environment variables, temporary files, logs, child processes, long-lived strings, and cleanup behavior. Do not claim forensic memory or crash-remnant inspection that was not performed.
 
 ## Workflow
 
 1. Identify trust boundaries and privileged components; sketch them in two or three lines.
-2. Trace untrusted input to sensitive sinks for each applicable category.
-3. Review auth paths, then secrets and configuration handling.
+2. Trace each untrusted source through its entry point to a sensitive sink.
+3. Review auth paths, then secrets, configuration, and observable credential-lifecycle handling.
 4. Review process, filesystem, network, and IPC boundaries.
 5. Review dependency and build-chain risk.
-6. Verify significant findings with concrete code paths or **safe** tests. Never run an exploit that could damage state; demonstrate reachability instead.
-7. Split the report: exploitable defects first, hardening suggestions after, clearly labeled.
+6. Verify significant findings with concrete code paths or safe proof. Never perform destructive exploitation or externally visible abuse; demonstrate reachability instead.
+7. Treat unused permissions and defense-in-depth improvements as hardening unless a reachable compromise is proven.
+8. Split the report: exploitable defects first, hardening suggestions after, clearly labeled.
 
 ## Output
 
-Contract report structure, plus: the scoping decision from step 0, a brief trust-boundary summary, and for each finding the attack or failure path and affected boundary. Remediation prompt scoped to exploitable defects first.
+Follow the audit contract and include the scoping decision and a brief trust-boundary summary. Every exploitable finding must state:
+
+- attacker or untrusted source;
+- entry point;
+- sensitive sink or operation;
+- required privileges and other preconditions;
+- practical impact;
+- safe evidence proving reachability.
+
+Scope remediation to exploitable defects first.
 
 Every exploitable defect uses the full finding schema. A hardening suggestion uses the full schema when it identifies a concrete, actionable risk. Optional defense-in-depth hygiene without a specific failure path belongs in a short `Hardening notes` list, is `INFORMATIONAL`, and is not counted as a defect.
 
@@ -47,49 +58,36 @@ Every exploitable defect uses the full finding schema. A hardening suggestion us
 
 ## Audit Contract
 
-**Audit-only.** This skill never: edits source files, repairs findings, installs dependencies, commits, pushes, publishes, deploys, changes configuration, or claims something works without executed evidence. If a fix is obvious, it goes in the remediation prompt, not into the repo.
+**Audit-only.** Do not edit source, repair findings, install dependencies, commit, push, publish, deploy, or change configuration. Repository-native checks may create derived artifacts; inspect state before and after, report generated changes, and never clean or overwrite user work.
 
-**Results:** `PASS` | `PASS WITH RISKS` | `FAIL` (check-polish may also return `NOT APPLICABLE`).
+Before any work, state:
+
+- `Target:` exact workflow, module, boundary, interface, candidate, or diff.
+- `Applicable categories:` what applies and what does not.
+- `Primary verification:` the defining proof required for this audit.
+- `User restrictions:` read-only, environment, data, credential, or side-effect limits.
+
+**Mode:** `EXECUTED` | `STATIC ONLY` | `SUPPLIED EVIDENCE`.
+
+**Outcome:** `PASS` | `PASS WITH RISKS` | `FAIL` | `BLOCKED` | `NOT APPLICABLE`.
+
+Return `FAIL` when a confirmed defect breaks the defining objective or any confirmed `CRITICAL` or `HIGH` defect exists. Use `PASS WITH RISKS` only for actionable lower-severity defects or explicitly bounded residual risk after defining verification completes.
+
+Return `BLOCKED` when the defining verification cannot run. Never launder missing proof into `PASS WITH RISKS`. Use `NOT APPLICABLE` only when the skill's subject does not exist. `PASS` requires completed defining verification and no actionable findings. Confirmed lower-severity defects require `PASS WITH RISKS`.
+
+Use disposable data and non-production systems. Do not cause destructive or externally visible effects without explicit authorization. Tie evidence to the relevant revision or artifact; label inference as `INFERENCE`.
 
 **Severity:** `CRITICAL` | `HIGH` | `MEDIUM` | `LOW` | `INFORMATIONAL`.
 
-**Classification:** every finding is exactly one of:
-- `CONFIRMED DEFECT` — reproduced or proven from code/execution
-- `LIKELY RISK` — strong evidence, not fully reproduced
-- `VERIFICATION GAP` — could not be checked; state why
+**Classification:** `CONFIRMED DEFECT` | `LIKELY RISK` | `VERIFICATION GAP`.
 
-**Finding schema (every finding, no exceptions):**
-
-```
+```text
 [SEVERITY] Title
-Classification: CONFIRMED DEFECT | LIKELY RISK | VERIFICATION GAP
-Evidence: file:line references, command output, screenshot, or measurement
-Consequence: what breaks and for whom
-Correction: specific recommended fix, or for a `VERIFICATION GAP`, the exact verification required (do not apply or execute it)
+Classification: <classification>
+Evidence: <source, execution, artifact, or measurement>
+Consequence: <what breaks and for whom>
+Correction: <smallest practical correction or required verification>
+Recheck: <exact check that proves resolution>
 ```
 
-**Evidence hierarchy (strongest first):** repository code with file:line → executed behavior → logs → tests → official documentation → reasoned inference explicitly labeled `INFERENCE`. Never present inference as observation.
-
-**Blocked validation:** if something cannot run, report exactly what could not run, why, the next-best verification performed instead, and the residual uncertainty. A check that could not execute its primary verification cannot return `PASS`. Return `PASS WITH RISKS` when no stronger defect is proven; confirmed evidence may still require `FAIL`.
-
-**Generated outputs:** repository-native checks may create derived build artifacts, caches, logs, or test output. Prefer disposable output locations or a temporary copy when practical. Inspect repository state before and after, report generated changes, and never clean, reset, delete, or overwrite user-owned work to restore the tree.
-
-**Execution safety:** use disposable data, temporary locations, and non-production accounts or services. Never exercise production systems, real user data, or externally visible side effects without explicit authorization.
-
-**Result thresholds:** `FAIL` when a confirmed defect breaks the skill's core objective, any confirmed `CRITICAL` or `HIGH` defect exists, or a release-blocking condition applies. `PASS WITH RISKS` when findings are limited to lower-severity defects, likely risks, or verification gaps. `PASS` only when primary verification ran and produced no actionable findings.
-
-**Report structure:**
-
-```
-RESULT: PASS | PASS WITH RISKS | FAIL
-Verified: <what was actually executed and confirmed>
-Not verified: <what was not, and why>
-
-Findings (severity-ordered, schema above)
-
-REMEDIATION PROMPT
-<ready-to-paste prompt for a separate fix session, scoped to the findings,
- including exact checks to rerun after remediation>
-```
-
-**No padding.** No generic essays, no restating the audit areas that produced nothing, no findings invented to look thorough. Zero findings is a valid, reportable outcome; omit the remediation prompt when there is nothing to remediate.
+Report `RESULT`, `MODE`, scope, verified evidence, unverified items, and only the highest-value findings in severity order. Do not pad the report or recap empty categories. Include a ready-to-paste `REMEDIATION PROMPT` only when actionable findings exist.

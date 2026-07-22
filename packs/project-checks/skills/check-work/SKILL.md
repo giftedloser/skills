@@ -5,7 +5,7 @@ description: Verify that a requested product or feature is genuinely implemented
 
 # check-work
 
-Determine whether the requested product or feature is **actually implemented and works end to end, from the user's seat.** This lane owns end-to-end user-visible behavior: does the thing the UI/CLI/docs claim exist, run, and produce real results. Implementation soundness (correctness, concurrency, reliability internals) belongs to `$check-code` — do not duplicate its territory; note a suspicion in one line and move on.
+Determine whether the explicitly requested workflows **work end to end from the user's seat.** This lane owns user-visible behavior. Keep implementation quality separate and defer internal correctness, concurrency, and reliability analysis to `$check-code`.
 
 ## Workflow
 
@@ -17,15 +17,15 @@ Prior logs, screenshots, recordings, supplied artifacts, and user-provided runti
 
 ### 2. Map the flow
 
-For each primary feature, trace the full chain: user action → UI handler → application state → backend command or API → execution logic → result handling → persisted state → user-visible result. A break anywhere in the chain is a finding.
+For each requested workflow, trace the full chain: user action → UI handler → application state → backend command or API → execution logic → result handling → persisted state → user-visible result. A break anywhere in the chain is a finding.
 
 ### 3. Hunt incomplete behavior
 
-Search for: `TODO`, `FIXME`, `placeholder`, `mock`, `stub`, `fake`, `simulated`, hardcoded return values, disabled controls, empty handlers, swallowed errors, success returned before work completes, unreachable features, unimplemented commands, fake progress indicators.
+On the requested workflow paths, search for: `TODO`, `FIXME`, `placeholder`, `mock`, `stub`, `fake`, `simulated`, hardcoded return values, disabled controls, empty handlers, swallowed errors, success returned before work completes, unreachable features, unimplemented commands, fake progress indicators.
 
 ### 4. Run the product
 
-Use available execution capabilities such as the in-app browser, Chrome control, Windows computer use, or Playwright. **Running the product is the primary path, not optional.** Use disposable test data and non-production accounts; never modify production systems or real user data without explicit authorization. Verify: startup, primary workflows, failure behavior, real output, logs, process exit status, saved state, reload behavior. Fallback to static analysis only when the product genuinely cannot start or requires unavailable auth/dependencies — and in that case the overall result caps at `PASS WITH RISKS` regardless of how clean the code looks.
+Use available execution capabilities such as the in-app browser, Chrome control, Windows computer use, or Playwright. Running the product is the defining verification. Use disposable test data and non-production accounts; never modify production systems or real user data without explicit authorization. Verify the requested workflows, relevant failure behavior, real output, logs, process exit status, saved state, and reload behavior. If meaningful behavioral verification cannot run, use static or supplied evidence as far as it reaches and return `BLOCKED` unless that evidence directly proves a defect.
 
 ### 5. Assess tests
 
@@ -33,11 +33,17 @@ Do tests exercise production code, verify behavior (not implementation trivia), 
 
 ### 6. Compare claims to reality
 
-Classify every advertised behavior as: fully working, partially working, disconnected (UI exists, backend doesn't), missing, or unverifiable.
+Classify each requested workflow as: `WORKING`, `PARTIAL`, `BROKEN`, or `UNVERIFIED`.
 
 ## Output
 
-Follow the contract report structure. Additionally list: verified workflows, unverified workflows, and per-workflow status from step 6. The remediation prompt must name the exact workflows to re-exercise after fixes.
+Follow the audit contract and report `MODE`. Include:
+
+| Requested workflow | Status | Evidence |
+|---|---|---|
+| `<workflow>` | `WORKING | PARTIAL | BROKEN | UNVERIFIED` | `<executed or supplied proof>` |
+
+Return `BLOCKED` when meaningful behavioral verification is unavailable. The remediation prompt, when needed, must name the exact workflows to re-exercise.
 
 ## Subagents
 
@@ -48,49 +54,36 @@ Follow the contract report structure. Additionally list: verified workflows, unv
 
 ## Audit Contract
 
-**Audit-only.** This skill never: edits source files, repairs findings, installs dependencies, commits, pushes, publishes, deploys, changes configuration, or claims something works without executed evidence. If a fix is obvious, it goes in the remediation prompt, not into the repo.
+**Audit-only.** Do not edit source, repair findings, install dependencies, commit, push, publish, deploy, or change configuration. Repository-native checks may create derived artifacts; inspect state before and after, report generated changes, and never clean or overwrite user work.
 
-**Results:** `PASS` | `PASS WITH RISKS` | `FAIL` (check-polish may also return `NOT APPLICABLE`).
+Before any work, state:
+
+- `Target:` exact workflow, module, boundary, interface, candidate, or diff.
+- `Applicable categories:` what applies and what does not.
+- `Primary verification:` the defining proof required for this audit.
+- `User restrictions:` read-only, environment, data, credential, or side-effect limits.
+
+**Mode:** `EXECUTED` | `STATIC ONLY` | `SUPPLIED EVIDENCE`.
+
+**Outcome:** `PASS` | `PASS WITH RISKS` | `FAIL` | `BLOCKED` | `NOT APPLICABLE`.
+
+Return `FAIL` when a confirmed defect breaks the defining objective or any confirmed `CRITICAL` or `HIGH` defect exists. Use `PASS WITH RISKS` only for actionable lower-severity defects or explicitly bounded residual risk after defining verification completes.
+
+Return `BLOCKED` when the defining verification cannot run. Never launder missing proof into `PASS WITH RISKS`. Use `NOT APPLICABLE` only when the skill's subject does not exist. `PASS` requires completed defining verification and no actionable findings. Confirmed lower-severity defects require `PASS WITH RISKS`.
+
+Use disposable data and non-production systems. Do not cause destructive or externally visible effects without explicit authorization. Tie evidence to the relevant revision or artifact; label inference as `INFERENCE`.
 
 **Severity:** `CRITICAL` | `HIGH` | `MEDIUM` | `LOW` | `INFORMATIONAL`.
 
-**Classification:** every finding is exactly one of:
-- `CONFIRMED DEFECT` — reproduced or proven from code/execution
-- `LIKELY RISK` — strong evidence, not fully reproduced
-- `VERIFICATION GAP` — could not be checked; state why
+**Classification:** `CONFIRMED DEFECT` | `LIKELY RISK` | `VERIFICATION GAP`.
 
-**Finding schema (every finding, no exceptions):**
-
-```
+```text
 [SEVERITY] Title
-Classification: CONFIRMED DEFECT | LIKELY RISK | VERIFICATION GAP
-Evidence: file:line references, command output, screenshot, or measurement
-Consequence: what breaks and for whom
-Correction: specific recommended fix, or for a `VERIFICATION GAP`, the exact verification required (do not apply or execute it)
+Classification: <classification>
+Evidence: <source, execution, artifact, or measurement>
+Consequence: <what breaks and for whom>
+Correction: <smallest practical correction or required verification>
+Recheck: <exact check that proves resolution>
 ```
 
-**Evidence hierarchy (strongest first):** repository code with file:line → executed behavior → logs → tests → official documentation → reasoned inference explicitly labeled `INFERENCE`. Never present inference as observation.
-
-**Blocked validation:** if something cannot run, report exactly what could not run, why, the next-best verification performed instead, and the residual uncertainty. A check that could not execute its primary verification cannot return `PASS`. Return `PASS WITH RISKS` when no stronger defect is proven; confirmed evidence may still require `FAIL`.
-
-**Generated outputs:** repository-native checks may create derived build artifacts, caches, logs, or test output. Prefer disposable output locations or a temporary copy when practical. Inspect repository state before and after, report generated changes, and never clean, reset, delete, or overwrite user-owned work to restore the tree.
-
-**Execution safety:** use disposable data, temporary locations, and non-production accounts or services. Never exercise production systems, real user data, or externally visible side effects without explicit authorization.
-
-**Result thresholds:** `FAIL` when a confirmed defect breaks the skill's core objective, any confirmed `CRITICAL` or `HIGH` defect exists, or a release-blocking condition applies. `PASS WITH RISKS` when findings are limited to lower-severity defects, likely risks, or verification gaps. `PASS` only when primary verification ran and produced no actionable findings.
-
-**Report structure:**
-
-```
-RESULT: PASS | PASS WITH RISKS | FAIL
-Verified: <what was actually executed and confirmed>
-Not verified: <what was not, and why>
-
-Findings (severity-ordered, schema above)
-
-REMEDIATION PROMPT
-<ready-to-paste prompt for a separate fix session, scoped to the findings,
- including exact checks to rerun after remediation>
-```
-
-**No padding.** No generic essays, no restating the audit areas that produced nothing, no findings invented to look thorough. Zero findings is a valid, reportable outcome; omit the remediation prompt when there is nothing to remediate.
+Report `RESULT`, `MODE`, scope, verified evidence, unverified items, and only the highest-value findings in severity order. Do not pad the report or recap empty categories. Include a ready-to-paste `REMEDIATION PROMPT` only when actionable findings exist.

@@ -1,15 +1,15 @@
 ---
 name: check-code
-description: Audit implementation correctness, reliability, data integrity, maintainability, and production readiness. Use when the user explicitly invokes $check-code or requests this named code audit; leave end-to-end user-visible behavior to $check-work.
+description: Audit implementation correctness, reliability, data integrity, and concrete operational risks in a declared module or three critical paths. Use when the user explicitly invokes $check-code or requests this named code audit; leave end-to-end user-visible behavior to $check-work.
 ---
 
 # check-code
 
-Audit **implementation soundness**: correctness, reliability, maintainability, and production readiness of the code itself. End-to-end user-visible behavior belongs to `$check-work` — if a feature is missing or disconnected from the user's perspective, note it in one line and leave it to that lane. This lane owns whether the code that exists is *right*.
+Audit **implementation soundness** for a declared module or the three most critical changed or high-risk paths. End-to-end behavior belongs to `$check-work`, exploitable security to `$check-sec`, and measured optimization to `$check-performance`.
 
 ## Step 0 — Scope first
 
-Identify which categories apply to this repository and state the scoping decision in the report. A single-threaded script gets no concurrency audit; a stateless tool gets no migration audit. Depth goes to applicable categories.
+Use the user's declared module when supplied. Otherwise identify and declare the three highest-value changed or critical paths before reviewing them. State which categories apply; do not expand into an audit of everything.
 
 ## Category reference
 
@@ -18,19 +18,20 @@ Identify which categories apply to this repository and state the scoping decisio
 **Reliability:** retries, timeouts, backoff, cleanup, partial failure, rollback, resource/handle leaks, temp file cleanup, interrupted operations.
 **Data integrity:** atomic writes, corrupted state, migrations, cache consistency, stale data, partial persistence, invalid serialization.
 **Errors and logging:** swallowed errors, silent fallbacks, misleading success, missing context, unusable messages, failure paths that leave bad state.
-**Code quality:** duplication, dead code, oversized functions, weak typing, unclear ownership, unnecessary abstraction, speculative architecture, inconsistent conventions, fragile coupling.
+**Operational maintainability:** duplication, unclear ownership, unnecessary abstraction, or fragile coupling only when it creates a concrete correctness, reliability, or operational risk.
 **Incomplete production behavior:** TODO production paths, mocks/placeholders/fakes in production, hardcoded success, disabled validation, temporary shortcuts, partially wired internals.
 
 ## Workflow
 
-1. Read repository instructions (AGENTS.md, README) and identify the primary architecture.
-2. Map critical execution paths.
+1. Read repository instructions and declare the requested module or three selected paths.
+2. Map each selected path and trace all callers before declaring a root cause.
 3. Review correctness and failure handling on those paths.
 4. Review concurrency, cancellation, timeout, and cleanup behavior where applicable.
 5. Review persistence and data integrity where applicable.
 6. Search for incomplete or fake implementation in production paths.
 7. Run tests, lint, type checks, and build where available. Command failures are evidence, not obstacles — never modify anything to make them pass.
 8. Reproduce important findings at runtime when practical; reproduction upgrades `LIKELY RISK` to `CONFIRMED DEFECT`.
+9. Exclude style commentary, generic maintainability advice, exploitable security findings owned by `$check-sec`, and optimization claims without measurement.
 
 ## React Doctor
 
@@ -38,7 +39,7 @@ Only when the repository actually uses React, only as supporting evidence. Advis
 
 ## Output
 
-Contract report structure, plus: the scoping decision, the strongest parts of the implementation (one short paragraph — credit what's genuinely good, no flattery), highest-risk code paths, and a remediation prompt with the exact verification commands to rerun.
+Follow the audit contract. Report the declared module or three selected paths, caller tracing performed, and concrete operational risks. Include the strongest verified implementation property only when it helps explain the result.
 
 ## Subagents
 
@@ -49,49 +50,36 @@ Contract report structure, plus: the scoping decision, the strongest parts of th
 
 ## Audit Contract
 
-**Audit-only.** This skill never: edits source files, repairs findings, installs dependencies, commits, pushes, publishes, deploys, changes configuration, or claims something works without executed evidence. If a fix is obvious, it goes in the remediation prompt, not into the repo.
+**Audit-only.** Do not edit source, repair findings, install dependencies, commit, push, publish, deploy, or change configuration. Repository-native checks may create derived artifacts; inspect state before and after, report generated changes, and never clean or overwrite user work.
 
-**Results:** `PASS` | `PASS WITH RISKS` | `FAIL` (check-polish may also return `NOT APPLICABLE`).
+Before any work, state:
+
+- `Target:` exact workflow, module, boundary, interface, candidate, or diff.
+- `Applicable categories:` what applies and what does not.
+- `Primary verification:` the defining proof required for this audit.
+- `User restrictions:` read-only, environment, data, credential, or side-effect limits.
+
+**Mode:** `EXECUTED` | `STATIC ONLY` | `SUPPLIED EVIDENCE`.
+
+**Outcome:** `PASS` | `PASS WITH RISKS` | `FAIL` | `BLOCKED` | `NOT APPLICABLE`.
+
+Return `FAIL` when a confirmed defect breaks the defining objective or any confirmed `CRITICAL` or `HIGH` defect exists. Use `PASS WITH RISKS` only for actionable lower-severity defects or explicitly bounded residual risk after defining verification completes.
+
+Return `BLOCKED` when the defining verification cannot run. Never launder missing proof into `PASS WITH RISKS`. Use `NOT APPLICABLE` only when the skill's subject does not exist. `PASS` requires completed defining verification and no actionable findings. Confirmed lower-severity defects require `PASS WITH RISKS`.
+
+Use disposable data and non-production systems. Do not cause destructive or externally visible effects without explicit authorization. Tie evidence to the relevant revision or artifact; label inference as `INFERENCE`.
 
 **Severity:** `CRITICAL` | `HIGH` | `MEDIUM` | `LOW` | `INFORMATIONAL`.
 
-**Classification:** every finding is exactly one of:
-- `CONFIRMED DEFECT` — reproduced or proven from code/execution
-- `LIKELY RISK` — strong evidence, not fully reproduced
-- `VERIFICATION GAP` — could not be checked; state why
+**Classification:** `CONFIRMED DEFECT` | `LIKELY RISK` | `VERIFICATION GAP`.
 
-**Finding schema (every finding, no exceptions):**
-
-```
+```text
 [SEVERITY] Title
-Classification: CONFIRMED DEFECT | LIKELY RISK | VERIFICATION GAP
-Evidence: file:line references, command output, screenshot, or measurement
-Consequence: what breaks and for whom
-Correction: specific recommended fix, or for a `VERIFICATION GAP`, the exact verification required (do not apply or execute it)
+Classification: <classification>
+Evidence: <source, execution, artifact, or measurement>
+Consequence: <what breaks and for whom>
+Correction: <smallest practical correction or required verification>
+Recheck: <exact check that proves resolution>
 ```
 
-**Evidence hierarchy (strongest first):** repository code with file:line → executed behavior → logs → tests → official documentation → reasoned inference explicitly labeled `INFERENCE`. Never present inference as observation.
-
-**Blocked validation:** if something cannot run, report exactly what could not run, why, the next-best verification performed instead, and the residual uncertainty. A check that could not execute its primary verification cannot return `PASS`. Return `PASS WITH RISKS` when no stronger defect is proven; confirmed evidence may still require `FAIL`.
-
-**Generated outputs:** repository-native checks may create derived build artifacts, caches, logs, or test output. Prefer disposable output locations or a temporary copy when practical. Inspect repository state before and after, report generated changes, and never clean, reset, delete, or overwrite user-owned work to restore the tree.
-
-**Execution safety:** use disposable data, temporary locations, and non-production accounts or services. Never exercise production systems, real user data, or externally visible side effects without explicit authorization.
-
-**Result thresholds:** `FAIL` when a confirmed defect breaks the skill's core objective, any confirmed `CRITICAL` or `HIGH` defect exists, or a release-blocking condition applies. `PASS WITH RISKS` when findings are limited to lower-severity defects, likely risks, or verification gaps. `PASS` only when primary verification ran and produced no actionable findings.
-
-**Report structure:**
-
-```
-RESULT: PASS | PASS WITH RISKS | FAIL
-Verified: <what was actually executed and confirmed>
-Not verified: <what was not, and why>
-
-Findings (severity-ordered, schema above)
-
-REMEDIATION PROMPT
-<ready-to-paste prompt for a separate fix session, scoped to the findings,
- including exact checks to rerun after remediation>
-```
-
-**No padding.** No generic essays, no restating the audit areas that produced nothing, no findings invented to look thorough. Zero findings is a valid, reportable outcome; omit the remediation prompt when there is nothing to remediate.
+Report `RESULT`, `MODE`, scope, verified evidence, unverified items, and only the highest-value findings in severity order. Do not pad the report or recap empty categories. Include a ready-to-paste `REMEDIATION PROMPT` only when actionable findings exist.

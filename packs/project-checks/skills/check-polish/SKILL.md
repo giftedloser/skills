@@ -9,36 +9,28 @@ Audit UI, UX, responsiveness, accessibility, and interaction quality of the prod
 
 ## Applicability gate
 
-Runs only when the repository contains a user interface. For non-UI repositories: `RESULT: NOT APPLICABLE`, one line stating why, stop. **Never invent UI findings.**
+Runs only when the repository contains a user interface. For non-UI repositories, return `RESULT: NOT APPLICABLE`, explain why in one line, and stop. This is the local `NOT APPLICABLE` variant. Never invent UI findings.
 
 ## Execution is the primary path
 
-Use available browser or app execution capabilities such as the in-app browser, Chrome control, Windows computer use, or Playwright. Run the product and interact with it using disposable test data and non-production accounts. Static review of components and styles is the fallback only when the product cannot start or requires unavailable auth/dependencies; fallback findings are labeled as unexecuted and the result caps at `PASS WITH RISKS`.
+Use available browser or app execution capabilities such as the in-app browser, Chrome control, Windows computer use, or Playwright. Run the product and interact with it using disposable test data and non-production accounts. When execution is unavailable, report `MODE: STATIC ONLY`; decisive static evidence may prove a defect, but missing interaction proof returns `BLOCKED`, not a visual pass.
 
-## Audit areas
+## Coverage
 
-**Visual:** spacing, typography, hierarchy, alignment, density, contrast, consistency, component reuse, icon consistency, color use, clipping, overflow.
-**Layout:** window resizing, viewport changes, responsive behavior, DPI scaling, zoom, min/max sizes, long text, empty content, dense content, localization pressure.
-**Interaction states:** hover, focus, active, selected, disabled, loading, empty, success, warning, failure, destructive confirmation.
-**Accessibility:** keyboard navigation, focus visibility, semantic structure, labels and accessible names, contrast, reduced motion, screen-reader implications, target sizes.
-**Product behavior:** discoverability, feedback, progress, error recovery, destructive-action clarity, consistency, navigation, text clarity, unnecessary friction.
-**Desktop apps:** title bar, window controls, tray, startup state, resize, DPI, native conventions, modal behavior, focus restoration.
+**CORE:** requested primary workflow, keyboard operation, focus visibility and movement, relevant error state, and minimum supported window or viewport size.
+
+**CONDITIONAL:** DPI scaling, browser zoom, mobile layout, tray behavior, reduced motion, network failure, modal focus restoration, additional breakpoints, long or localized text, and platform-specific window behavior. Test only the conditions applicable to the requested interface.
+
+Across applicable coverage, inspect visual hierarchy, spacing, typography, contrast, clipping, overflow, component consistency, interaction feedback, loading/empty/error/disabled states, accessible names, semantics, target sizes, and recovery behavior.
 
 ## Workflow
 
-1. Identify supported UI surfaces.
-2. Launch the application.
-3. Exercise primary workflows.
-4. Test relevant viewports or window sizes (desktop + narrow where relevant).
-5. Walk the interface by keyboard only.
-6. Inspect loading, empty, error, and disabled states.
-7. For web frontends: check browser console errors, failed network requests, layout overflow, focus behavior.
-8. Compare repeated components and interactions for consistency.
-9. **Separate defects from taste.** A defect breaks a rule the product itself established or a platform convention; a redesign preference is `INFORMATIONAL` at most, or omitted.
-
-## Minimum interaction matrix
-
-Always exercise the primary workflow, keyboard navigation, focus visibility, loading, empty, error, disabled states, and resizing at the smallest supported surface. For web interfaces, also test desktop and narrow viewports, browser zoom, reduced motion when relevant, console errors, and failed network requests. For Windows desktop interfaces, also test minimum, normal, and maximized windows; 100%, 150%, and 200% DPI when available; modal focus restoration; and relevant title-bar, tray, and native-window behavior. Mark unavailable matrix cells as verification gaps rather than silently skipping them.
+1. Identify the requested surface and applicable CORE and CONDITIONAL coverage.
+2. Launch the application when possible and exercise the requested workflow.
+3. Complete CORE coverage, then only applicable CONDITIONAL checks.
+4. For web interfaces, inspect console errors, failed network requests, layout overflow, and focus behavior when runtime access exists.
+5. Capture screenshots for visual findings whenever execution is available; identify the tested viewport or window size and interaction.
+6. Separate defects from taste. A defect violates accessibility, established product behavior, or a platform convention; personal redesign preference is `INFORMATIONAL` at most or omitted.
 
 ## React Doctor
 
@@ -46,7 +38,7 @@ React projects only, supporting evidence only. Never replaces visual and interac
 
 ## Output
 
-Contract report structure (with `NOT APPLICABLE` available), plus per finding the affected screen or interaction. End with: strongest UI qualities (brief, honest), highest-priority polish issues, and a remediation prompt naming the exact views and interactions to retest.
+Follow the audit contract. Report CORE and CONDITIONAL coverage separately and identify the affected screen, interaction, viewport, and screenshot for each visual finding when available. Name the exact views and interactions to retest after remediation.
 
 ## Subagents
 
@@ -57,49 +49,36 @@ Contract report structure (with `NOT APPLICABLE` available), plus per finding th
 
 ## Audit Contract
 
-**Audit-only.** This skill never: edits source files, repairs findings, installs dependencies, commits, pushes, publishes, deploys, changes configuration, or claims something works without executed evidence. If a fix is obvious, it goes in the remediation prompt, not into the repo.
+**Audit-only.** Do not edit source, repair findings, install dependencies, commit, push, publish, deploy, or change configuration. Repository-native checks may create derived artifacts; inspect state before and after, report generated changes, and never clean or overwrite user work.
 
-**Results:** `PASS` | `PASS WITH RISKS` | `FAIL` (check-polish may also return `NOT APPLICABLE`).
+Before any work, state:
+
+- `Target:` exact workflow, module, boundary, interface, candidate, or diff.
+- `Applicable categories:` what applies and what does not.
+- `Primary verification:` the defining proof required for this audit.
+- `User restrictions:` read-only, environment, data, credential, or side-effect limits.
+
+**Mode:** `EXECUTED` | `STATIC ONLY` | `SUPPLIED EVIDENCE`.
+
+**Outcome:** `PASS` | `PASS WITH RISKS` | `FAIL` | `BLOCKED` | `NOT APPLICABLE`.
+
+Return `FAIL` when a confirmed defect breaks the defining objective or any confirmed `CRITICAL` or `HIGH` defect exists. Use `PASS WITH RISKS` only for actionable lower-severity defects or explicitly bounded residual risk after defining verification completes.
+
+Return `BLOCKED` when the defining verification cannot run. Never launder missing proof into `PASS WITH RISKS`. Use `NOT APPLICABLE` only when the skill's subject does not exist. `PASS` requires completed defining verification and no actionable findings. Confirmed lower-severity defects require `PASS WITH RISKS`.
+
+Use disposable data and non-production systems. Do not cause destructive or externally visible effects without explicit authorization. Tie evidence to the relevant revision or artifact; label inference as `INFERENCE`.
 
 **Severity:** `CRITICAL` | `HIGH` | `MEDIUM` | `LOW` | `INFORMATIONAL`.
 
-**Classification:** every finding is exactly one of:
-- `CONFIRMED DEFECT` — reproduced or proven from code/execution
-- `LIKELY RISK` — strong evidence, not fully reproduced
-- `VERIFICATION GAP` — could not be checked; state why
+**Classification:** `CONFIRMED DEFECT` | `LIKELY RISK` | `VERIFICATION GAP`.
 
-**Finding schema (every finding, no exceptions):**
-
-```
+```text
 [SEVERITY] Title
-Classification: CONFIRMED DEFECT | LIKELY RISK | VERIFICATION GAP
-Evidence: file:line references, command output, screenshot, or measurement
-Consequence: what breaks and for whom
-Correction: specific recommended fix, or for a `VERIFICATION GAP`, the exact verification required (do not apply or execute it)
+Classification: <classification>
+Evidence: <source, execution, artifact, or measurement>
+Consequence: <what breaks and for whom>
+Correction: <smallest practical correction or required verification>
+Recheck: <exact check that proves resolution>
 ```
 
-**Evidence hierarchy (strongest first):** repository code with file:line → executed behavior → logs → tests → official documentation → reasoned inference explicitly labeled `INFERENCE`. Never present inference as observation.
-
-**Blocked validation:** if something cannot run, report exactly what could not run, why, the next-best verification performed instead, and the residual uncertainty. A check that could not execute its primary verification cannot return `PASS`. Return `PASS WITH RISKS` when no stronger defect is proven; confirmed evidence may still require `FAIL`.
-
-**Generated outputs:** repository-native checks may create derived build artifacts, caches, logs, or test output. Prefer disposable output locations or a temporary copy when practical. Inspect repository state before and after, report generated changes, and never clean, reset, delete, or overwrite user-owned work to restore the tree.
-
-**Execution safety:** use disposable data, temporary locations, and non-production accounts or services. Never exercise production systems, real user data, or externally visible side effects without explicit authorization.
-
-**Result thresholds:** `FAIL` when a confirmed defect breaks the skill's core objective, any confirmed `CRITICAL` or `HIGH` defect exists, or a release-blocking condition applies. `PASS WITH RISKS` when findings are limited to lower-severity defects, likely risks, or verification gaps. `PASS` only when primary verification ran and produced no actionable findings.
-
-**Report structure:**
-
-```
-RESULT: PASS | PASS WITH RISKS | FAIL
-Verified: <what was actually executed and confirmed>
-Not verified: <what was not, and why>
-
-Findings (severity-ordered, schema above)
-
-REMEDIATION PROMPT
-<ready-to-paste prompt for a separate fix session, scoped to the findings,
- including exact checks to rerun after remediation>
-```
-
-**No padding.** No generic essays, no restating the audit areas that produced nothing, no findings invented to look thorough. Zero findings is a valid, reportable outcome; omit the remediation prompt when there is nothing to remediate.
+Report `RESULT`, `MODE`, scope, verified evidence, unverified items, and only the highest-value findings in severity order. Do not pad the report or recap empty categories. Include a ready-to-paste `REMEDIATION PROMPT` only when actionable findings exist.

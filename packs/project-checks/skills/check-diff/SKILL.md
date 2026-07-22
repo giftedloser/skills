@@ -45,17 +45,21 @@ Never fetch, pull, switch branches, or change repository state to manufacture a 
 
 Prefer findings anchored to changed lines. An unchanged location is acceptable only when the diff newly makes that existing path reachable or unsafe; explain the causal link. Prior logs, screenshots, review comments, supplied artifacts, and user-provided runtime evidence can confirm a defect when provenance, age, and revision mapping are reliable. Otherwise classify it as `LIKELY RISK` until reproduced.
 
-Review every meaningful changed file. Generated, vendored, lock, snapshot, or binary changes may be inspected using the appropriate summary or integrity check rather than line-by-line review. If diff size, unavailable tooling, missing history, or generated content prevents material coverage, state the gap and do not return `PASS`.
+Review every meaningful changed file. Generated, vendored, lock, snapshot, or binary changes may be inspected using the appropriate summary or integrity check rather than line-by-line review. Declare `Coverage: FULL` or `Coverage: PARTIAL` and list the exact reviewed range and exclusions. Disclose actual coverage; do not invent a line-count threshold. Partial coverage cannot produce a full `PASS`.
 
 ## Output
 
 Follow the audit contract. Additionally report:
 
+- `Coverage: FULL | PARTIAL` and the exact reviewed range;
 - intended change and exact diff reviewed;
 - committed, staged, unstaged, and untracked coverage;
 - focused verification executed;
 - coverage gaps or out-of-scope pre-existing blockers;
-- a remediation prompt limited to change-caused findings, with exact checks to rerun in the separate correction session.
+- findings causally tied to the diff;
+- tests only when the diff changes meaningful behavior.
+
+Local outcome rule: return `BLOCKED` when no reliable baseline or meaningful diff exists, or when the defining review cannot run. Partial coverage cannot produce a full `PASS`.
 
 ## Subagents
 
@@ -66,50 +70,36 @@ Use `reviewer` when the diff is substantial enough to benefit. Use `explorer` on
 
 ## Audit Contract
 
-**Audit-only.** This skill never: edits source files, repairs findings, installs dependencies, commits, pushes, publishes, deploys, changes configuration, or claims something works without executed evidence. If a fix is obvious, it goes in the remediation prompt, not into the repo.
+**Audit-only.** Do not edit source, repair findings, install dependencies, commit, push, publish, deploy, or change configuration. Repository-native checks may create derived artifacts; inspect state before and after, report generated changes, and never clean or overwrite user work.
 
-**Results:** `PASS` | `PASS WITH RISKS` | `FAIL` (`check-diff` may also return `BLOCKED` when no reliable review target exists).
+Before any work, state:
+
+- `Target:` exact workflow, module, boundary, interface, candidate, or diff.
+- `Applicable categories:` what applies and what does not.
+- `Primary verification:` the defining proof required for this audit.
+- `User restrictions:` read-only, environment, data, credential, or side-effect limits.
+
+**Mode:** `EXECUTED` | `STATIC ONLY` | `SUPPLIED EVIDENCE`.
+
+**Outcome:** `PASS` | `PASS WITH RISKS` | `FAIL` | `BLOCKED` | `NOT APPLICABLE`.
+
+Return `FAIL` when a confirmed defect breaks the defining objective or any confirmed `CRITICAL` or `HIGH` defect exists. Use `PASS WITH RISKS` only for actionable lower-severity defects or explicitly bounded residual risk after defining verification completes.
+
+Return `BLOCKED` when the defining verification cannot run. Never launder missing proof into `PASS WITH RISKS`. Use `NOT APPLICABLE` only when the skill's subject does not exist. `PASS` requires completed defining verification and no actionable findings. Confirmed lower-severity defects require `PASS WITH RISKS`.
+
+Use disposable data and non-production systems. Do not cause destructive or externally visible effects without explicit authorization. Tie evidence to the relevant revision or artifact; label inference as `INFERENCE`.
 
 **Severity:** `CRITICAL` | `HIGH` | `MEDIUM` | `LOW` | `INFORMATIONAL`.
 
-**Classification:** every finding is exactly one of:
-- `CONFIRMED DEFECT` — reproduced or proven from code/execution
-- `LIKELY RISK` — strong evidence, not fully reproduced
-- `VERIFICATION GAP` — could not be checked; state why
+**Classification:** `CONFIRMED DEFECT` | `LIKELY RISK` | `VERIFICATION GAP`.
 
-**Finding schema (every finding, no exceptions):**
-
-```
+```text
 [SEVERITY] Title
-Classification: CONFIRMED DEFECT | LIKELY RISK | VERIFICATION GAP
-Evidence: file:line references, command output, screenshot, or measurement
-Consequence: what breaks and for whom
-Correction: specific recommended fix, or for a `VERIFICATION GAP`, the exact verification required (do not apply or execute it)
+Classification: <classification>
+Evidence: <source, execution, artifact, or measurement>
+Consequence: <what breaks and for whom>
+Correction: <smallest practical correction or required verification>
+Recheck: <exact check that proves resolution>
 ```
 
-**Evidence hierarchy (strongest first):** repository code with file:line → executed behavior → logs → tests → official documentation → reasoned inference explicitly labeled `INFERENCE`. Never present inference as observation.
-
-**Blocked validation:** if something cannot run, report exactly what could not run, why, the next-best verification performed instead, and the residual uncertainty. A check that could not execute its primary verification cannot return `PASS`. Return `PASS WITH RISKS` when no stronger defect is proven; confirmed evidence may still require `FAIL`.
-
-**Generated outputs:** repository-native checks may create derived build artifacts, caches, logs, or test output. Prefer disposable output locations or a temporary copy when practical. Inspect repository state before and after, report generated changes, and never clean, reset, delete, or overwrite user-owned work to restore the tree.
-
-**Execution safety:** use disposable data, temporary locations, and non-production accounts or services. Never exercise production systems, real user data, or externally visible side effects without explicit authorization.
-
-**Result thresholds:** `FAIL` when a confirmed defect breaks the change's stated purpose or any confirmed `CRITICAL` or `HIGH` defect exists. `PASS WITH RISKS` when findings are limited to lower-severity defects, likely risks, or verification gaps. `PASS` only when the meaningful diff was covered, primary verification ran, and no actionable findings remain.
-
-**Report structure:**
-
-```
-RESULT: PASS | PASS WITH RISKS | FAIL | BLOCKED
-Diff reviewed: <intended change, exact baseline and target, included working-tree surfaces>
-Verified: <what was actually executed and confirmed>
-Not verified: <what was not, and why>
-
-Findings (severity-ordered, schema above)
-
-REMEDIATION PROMPT
-<ready-to-paste prompt for a separate correction session, scoped to the findings,
- including exact checks to rerun after remediation>
-```
-
-**No padding.** No generic essays, no restating review areas that produced nothing, no style nits presented as defects, and no findings invented to look thorough. Zero findings is a valid, reportable outcome; omit the remediation prompt when there is nothing to remediate.
+Report `RESULT`, `MODE`, scope, verified evidence, unverified items, and only the highest-value findings in severity order. Do not pad the report or recap empty categories. Include a ready-to-paste `REMEDIATION PROMPT` only when actionable findings exist.

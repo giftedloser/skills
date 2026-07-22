@@ -5,7 +5,7 @@ description: Audit actual performance bottlenecks using measured evidence and qu
 
 # check-performance
 
-Audit actual performance bottlenecks using **measured evidence.** Two hard rules distinguish this lane:
+Audit one named workflow and symptom using **measured evidence.** Require a representative workload and a usable measurement path before treating the audit as executable. Two hard rules distinguish this lane:
 
 1. **No optimization recommendation without a stated expected benefit.** "This could be faster" is not a finding.
 2. **No finding above MEDIUM severity without a measurement.** Unmeasured scaling concerns are `LIKELY RISK`, capped at MEDIUM, and labeled inferred.
@@ -21,17 +21,17 @@ Audit actual performance bottlenecks using **measured evidence.** Two hard rules
 
 ## Workflow
 
-1. Identify the performance-sensitive workflows — what does the user actually wait on?
-2. Collect existing measurements (CI timings, logs, benchmarks) where available.
-3. Measure: startup time, execution time of key operations, memory, CPU, I/O counts. Use the simplest instrument that produces a number (timers, task manager, `Measure-Command`, browser performance panel, bundle analyzer).
-4. Inspect likely hot paths in code.
-5. Reproduce reported or suspected problems.
-6. Separate measured defects from inferred scaling risks in the report — different sections.
-7. For every recommended correction, state the expected benefit and the **exact measurement to rerun after the fix** to confirm it.
+1. State the named workflow, reported or observable symptom, representative workload, and measurement path.
+2. Establish a representative baseline using existing timings or the simplest instrument that produces a useful number.
+3. Reproduce the symptom under the same workload.
+4. Locate the bottleneck in the named workflow; do not expand into a repository-wide performance audit.
+5. Separate measured defects from inferred risks. Unmeasured concerns remain `LIKELY RISK` and are capped at `MEDIUM`.
+6. State the expected benefit and smallest justified correction.
+7. Repeat the same measurement after remediation; make that measurement the finding's exact recheck.
 
 ## Output
 
-Contract report structure, plus per finding: measured vs inferred, affected workflow, expected benefit, and the exact post-fix measurement. Measured findings include the observed numbers. Inferred findings state the evidence and assumption without inventing numbers; quantify them only after measurement. When a reliable numeric benefit forecast is unavailable, state a measurable success target or expected direction plus the measurement that will validate it. End with: measurements performed, measurements unavailable and why, likely highest-value improvements, remediation prompt.
+Follow the audit contract. Report the workflow, symptom, workload, baseline, bottleneck, expected benefit, and repeat measurement. Return `BLOCKED` when no usable representative measurement can be obtained. Inferred concerns must state their evidence and assumption without invented numbers.
 
 ## Subagents
 
@@ -42,49 +42,36 @@ Contract report structure, plus per finding: measured vs inferred, affected work
 
 ## Audit Contract
 
-**Audit-only.** This skill never: edits source files, repairs findings, installs dependencies, commits, pushes, publishes, deploys, changes configuration, or claims something works without executed evidence. If a fix is obvious, it goes in the remediation prompt, not into the repo.
+**Audit-only.** Do not edit source, repair findings, install dependencies, commit, push, publish, deploy, or change configuration. Repository-native checks may create derived artifacts; inspect state before and after, report generated changes, and never clean or overwrite user work.
 
-**Results:** `PASS` | `PASS WITH RISKS` | `FAIL` (check-polish may also return `NOT APPLICABLE`).
+Before any work, state:
+
+- `Target:` exact workflow, module, boundary, interface, candidate, or diff.
+- `Applicable categories:` what applies and what does not.
+- `Primary verification:` the defining proof required for this audit.
+- `User restrictions:` read-only, environment, data, credential, or side-effect limits.
+
+**Mode:** `EXECUTED` | `STATIC ONLY` | `SUPPLIED EVIDENCE`.
+
+**Outcome:** `PASS` | `PASS WITH RISKS` | `FAIL` | `BLOCKED` | `NOT APPLICABLE`.
+
+Return `FAIL` when a confirmed defect breaks the defining objective or any confirmed `CRITICAL` or `HIGH` defect exists. Use `PASS WITH RISKS` only for actionable lower-severity defects or explicitly bounded residual risk after defining verification completes.
+
+Return `BLOCKED` when the defining verification cannot run. Never launder missing proof into `PASS WITH RISKS`. Use `NOT APPLICABLE` only when the skill's subject does not exist. `PASS` requires completed defining verification and no actionable findings. Confirmed lower-severity defects require `PASS WITH RISKS`.
+
+Use disposable data and non-production systems. Do not cause destructive or externally visible effects without explicit authorization. Tie evidence to the relevant revision or artifact; label inference as `INFERENCE`.
 
 **Severity:** `CRITICAL` | `HIGH` | `MEDIUM` | `LOW` | `INFORMATIONAL`.
 
-**Classification:** every finding is exactly one of:
-- `CONFIRMED DEFECT` — reproduced or proven from code/execution
-- `LIKELY RISK` — strong evidence, not fully reproduced
-- `VERIFICATION GAP` — could not be checked; state why
+**Classification:** `CONFIRMED DEFECT` | `LIKELY RISK` | `VERIFICATION GAP`.
 
-**Finding schema (every finding, no exceptions):**
-
-```
+```text
 [SEVERITY] Title
-Classification: CONFIRMED DEFECT | LIKELY RISK | VERIFICATION GAP
-Evidence: file:line references, command output, screenshot, or measurement
-Consequence: what breaks and for whom
-Correction: specific recommended fix, or for a `VERIFICATION GAP`, the exact verification required (do not apply or execute it)
+Classification: <classification>
+Evidence: <source, execution, artifact, or measurement>
+Consequence: <what breaks and for whom>
+Correction: <smallest practical correction or required verification>
+Recheck: <exact check that proves resolution>
 ```
 
-**Evidence hierarchy (strongest first):** repository code with file:line → executed behavior → logs → tests → official documentation → reasoned inference explicitly labeled `INFERENCE`. Never present inference as observation.
-
-**Blocked validation:** if something cannot run, report exactly what could not run, why, the next-best verification performed instead, and the residual uncertainty. A check that could not execute its primary verification cannot return `PASS`. Return `PASS WITH RISKS` when no stronger defect is proven; confirmed evidence may still require `FAIL`.
-
-**Generated outputs:** repository-native checks may create derived build artifacts, caches, logs, or test output. Prefer disposable output locations or a temporary copy when practical. Inspect repository state before and after, report generated changes, and never clean, reset, delete, or overwrite user-owned work to restore the tree.
-
-**Execution safety:** use disposable data, temporary locations, and non-production accounts or services. Never exercise production systems, real user data, or externally visible side effects without explicit authorization.
-
-**Result thresholds:** `FAIL` when a confirmed defect breaks the skill's core objective, any confirmed `CRITICAL` or `HIGH` defect exists, or a release-blocking condition applies. `PASS WITH RISKS` when findings are limited to lower-severity defects, likely risks, or verification gaps. `PASS` only when primary verification ran and produced no actionable findings.
-
-**Report structure:**
-
-```
-RESULT: PASS | PASS WITH RISKS | FAIL
-Verified: <what was actually executed and confirmed>
-Not verified: <what was not, and why>
-
-Findings (severity-ordered, schema above)
-
-REMEDIATION PROMPT
-<ready-to-paste prompt for a separate fix session, scoped to the findings,
- including exact checks to rerun after remediation>
-```
-
-**No padding.** No generic essays, no restating the audit areas that produced nothing, no findings invented to look thorough. Zero findings is a valid, reportable outcome; omit the remediation prompt when there is nothing to remediate.
+Report `RESULT`, `MODE`, scope, verified evidence, unverified items, and only the highest-value findings in severity order. Do not pad the report or recap empty categories. Include a ready-to-paste `REMEDIATION PROMPT` only when actionable findings exist.
