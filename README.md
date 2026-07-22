@@ -1,4 +1,4 @@
-# GiftedLoser Skills
+# GiftedLoser's Skills
 
 
 ![Skills](https://img.shields.io/badge/skills-10-6d5dfc)
