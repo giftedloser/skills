@@ -6,7 +6,7 @@
 ![Invocation](https://img.shields.io/badge/invocation-automatic%20%2B%20explicit-3974c6)
 [![License: MIT](https://img.shields.io/badge/license-MIT-c47716)](LICENSE)
 
-GiftedLoser Skills is a collection of personal Codex workflows. Project Start turns an uncertain idea into a well-formed project, Project Checks audits work already done, and Project Polish improves repository presentation and identity.
+GiftedLoser's Skills is a collection of personal Codex workflows. Project Start turns an uncertain idea into a well-formed project, Project Checks audits work already done, and Project Polish improves repository presentation and identity.
 
 Each skill is independent. Together they cover the full range from idea to release, but they are not a pipeline and are not meant to run as a sequence. Install the whole collection or only the pack you need, and invoke skills one at a time as the work calls for them.
 
