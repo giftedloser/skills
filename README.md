@@ -12,7 +12,7 @@ The skills are built for Codex and are not currently compatible with Claude Code
 
 Each skill is independent. Together they cover the full range from idea to release, but they are not a pipeline and are not meant to run as a sequence. Install the whole collection or only the pack you need, and invoke skills one at a time as the work calls for them.
 
-## From idea to release
+## Example Workflow
 
 ![Project lifecycle from idea to release](assets/project-lifecycle.svg)
 
