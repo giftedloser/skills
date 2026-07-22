@@ -48,7 +48,7 @@ The pack ZIPs remain available when you want only one part:
 | “Could someone misuse or break this?” | `$check-sec` | Practical security defects, unsafe trust assumptions, and clearly separated hardening advice |
 | “Why is this slow?” | `$check-performance` | Measured bottlenecks, expected benefits, and exact measurements to rerun after fixes |
 | “Does the interface feel finished?” | `$check-polish` | Real UI testing for visual quality, interaction, responsiveness, accessibility, and platform behavior |
-| “Can I ship this?” | `$check-release` | A GO, GO WITH RISKS, NO-GO, or unavailable decision covering docs, versions, build, packaging, installation, upgrades, signing, and removal |
+| “Can I ship this?” | `$check-release` | A `GO`, `GO WITH RISKS`, `NO-GO`, or `unavailable` decision covering docs, versions, build, packaging, installation, upgrades, signing, and removal |
 | “Make this repository look complete.” | `$repo-polisher` | Repository identity, README craft, diagrams, badges, templates, and metadata, grounded in evidence |
 
 
