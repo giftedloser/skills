@@ -26,15 +26,6 @@ Describe the result you want. Codex routes the narrowest applicable skill, and a
 | [Project Checks](packs/project-checks/README.md) | Seven `$check-*` skills | Audit the change, behavior, implementation, security, performance, interface, and release |
 | [Project Polish](packs/project-polish/README.md) | `$repo-polisher` | Improve repository identity, README craft, diagrams, templates, badges, and metadata without changing source behavior |
 
-### Complete bundle
-
-`dist/GiftedLoser-Skills-Complete.zip` contains all ten skills from all three packs. Use it when you want the full idea-to-release workflow plus repository polishing.
-
-The pack ZIPs remain available when you want only one part:
-
-- `dist/GiftedLoser-Project-Start.zip`
-- `dist/GiftedLoser-Project-Checks.zip`
-- `dist/GiftedLoser-Project-Polish.zip`
 
 ## Skills at a glance
 
