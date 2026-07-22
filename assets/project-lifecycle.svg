@@ -106,7 +106,7 @@
   <path class="branch" d="M128 388H1072"/>
 
   <text class="group" x="380" y="422">SHIP</text>
-  <text class="group" x="685" y="422">POLISH</text>
+  <text class="group" x="825" y="422">POLISH</text>
 
   <path class="edge" d="M380 388V430"/>
 
