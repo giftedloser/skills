@@ -1,0 +1,6 @@
+interface:
+  display_name: "Repo Polisher"
+  short_description: "Improve repository docs, metadata, and hygiene"
+  default_prompt: "Use $repo-polisher to improve this repository's README, metadata, docs, templates, and ignore rules."
+policy:
+  allow_implicit_invocation: true

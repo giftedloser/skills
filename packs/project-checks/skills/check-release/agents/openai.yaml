@@ -1,7 +1,7 @@
 interface:
-  display_name: Check Release
-  short_description: Audit-only GO/NO-GO gate for repository and product release readiness. Never publishes or deploys.
-  default_prompt: Use $check-release to determine whether this repository and product are documented, versioned, built, packaged, installed, and removed reliably.
+  display_name: "Check Release"
+  short_description: "Audit one candidate for a release decision"
+  default_prompt: "Use $check-release to audit one identified release candidate and return the release decision."
 
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

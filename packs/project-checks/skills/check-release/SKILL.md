@@ -1,6 +1,6 @@
 ---
 name: check-release
-description: Determine whether a repository and product are ready for release, including documentation, versioning, build, packaging, installation, launch, update, and removal. Use when the user explicitly invokes $check-release or requests this named release-readiness audit; provide a GO or NO-GO decision without publishing or deploying.
+description: Do not use when shipping or release is mentioned in passing, or to publish, deploy, tag, or implement release work. Use only when the user clearly asks for a release-readiness audit of one identified candidate and wants a GO, GO WITH RISKS, NO-GO, or unavailable decision. Explicit $check-release always invokes it.
 ---
 
 # check-release
@@ -57,11 +57,6 @@ Follow the audit contract and report source readiness and artifact readiness sep
 - `BLOCKED` → `DECISION UNAVAILABLE`
 
 A confirmed build failure is `FAIL` / `NO-GO`, not `BLOCKED`. End with artifacts verified, release actions deliberately not performed, install behaviors executed versus inspected, blockers, risks, and the exact release checks to rerun.
-
-## Subagents
-
-`release-captain` for substantial packaging or release pipelines. `security-reviewer` when signing, updates, elevation, or distribution boundaries need security review.
-
 
 ---
 

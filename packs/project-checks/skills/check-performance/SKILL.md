@@ -1,6 +1,6 @@
 ---
 name: check-performance
-description: Audit actual performance bottlenecks using measured evidence and quantified expected benefits. Use when the user explicitly invokes $check-performance or requests this named performance audit; do not recommend speculative optimization.
+description: Do not use when slow performance is mentioned in passing, for optimization implementation, or for broad health review. Use only when the user clearly asks for a measured performance audit of one named workflow, symptom, representative workload, and measurement path. Explicit $check-performance always invokes it.
 ---
 
 # check-performance
@@ -32,11 +32,6 @@ Audit one named workflow and symptom using **measured evidence.** Require a repr
 ## Output
 
 Follow the audit contract. Report the workflow, symptom, workload, baseline, bottleneck, expected benefit, and repeat measurement. Return `BLOCKED` when no usable representative measurement can be obtained. Inferred concerns must state their evidence and assumption without invented numbers.
-
-## Subagents
-
-`explorer` for locating hot paths in larger repositories. Specialist delegation only when independent measurement materially helps.
-
 
 ---
 

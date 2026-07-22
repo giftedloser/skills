@@ -1,6 +1,6 @@
 ---
 name: check-code
-description: Audit implementation correctness, reliability, data integrity, and concrete operational risks in a declared module or three critical paths. Use when the user explicitly invokes $check-code or requests this named code audit; leave end-to-end user-visible behavior to $check-work.
+description: Do not use for ordinary coding, diff-only review, security auditing, performance measurement, or end-to-end workflow verification. Use only when the user clearly asks for a focused code or implementation audit of a declared module or three critical paths. Explicit $check-code always invokes it.
 ---
 
 # check-code
@@ -40,11 +40,6 @@ Only when the repository actually uses React, only as supporting evidence. Advis
 ## Output
 
 Follow the audit contract. Report the declared module or three selected paths, caller tracing performed, and concrete operational risks. Include the strongest verified implementation property only when it helps explain the result.
-
-## Subagents
-
-`reviewer` for substantial correctness review. `explorer` for codebase mapping. De-duplicate agent findings before reporting.
-
 
 ---
 

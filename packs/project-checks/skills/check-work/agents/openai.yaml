@@ -1,7 +1,7 @@
 interface:
-  display_name: Check Work
-  short_description: Audit-only. Verifies the product actually works end to end by running it. Owns user-visible behavior.
-  default_prompt: Use $check-work to verify the requested functionality is genuinely implemented and works end to end.
+  display_name: "Check Work"
+  short_description: "Audit requested workflows end to end"
+  default_prompt: "Use $check-work to run and verify the explicitly requested user workflows end to end."
 
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

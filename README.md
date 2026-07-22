@@ -2,12 +2,12 @@
 
 > From a rough idea to a release decision, with evidence at every step.
 
-![Skills](https://img.shields.io/badge/skills-9-6d5dfc)
+![Skills](https://img.shields.io/badge/skills-10-6d5dfc)
 ![Packs](https://img.shields.io/badge/packs-2-167d68)
-![Invocation](https://img.shields.io/badge/invocation-explicit-3974c6)
+![Invocation](https://img.shields.io/badge/invocation-automatic%20%2B%20explicit-3974c6)
 [![License: MIT](https://img.shields.io/badge/license-MIT-c47716)](LICENSE)
 
-GiftedLoser Skills is a growing collection of personal, on-demand Codex workflows. The first pack helps turn an uncertain idea into a well-formed project. The second checks whether the resulting work is correct, real, safe, fast, polished, and ready to release.
+GiftedLoser Skills is a growing collection of personal Codex workflows. The first pack helps turn an uncertain idea into a well-formed project. The second audits the resulting work and improves repository presentation and hygiene.
 
 These skills are built for Codex and are not currently compatible with Claude Code or other agent runtimes.
 
@@ -17,18 +17,18 @@ These skills are intentionally composable. Install the complete collection or on
 
 ![Project lifecycle from idea to release](assets/project-lifecycle.svg)
 
-You do not need to run every check on every change. Choose the confidence checks that match the project's actual risks.
+Describe the result you want. Codex routes the narrowest applicable skill, and audit skills stay silent unless the request clearly asks for an audit. Explicit `$name` invocation remains available as an override. Audits never run as an automatic suite.
 
 ## Packs
 
 | Pack | Skills | Purpose |
 |---|---|---|
 | [Project Start](packs/project-start/README.md) | `$new-idea`, `$project-init` | Challenge the idea, create an approved project handoff, and establish the repository safely |
-| [Project Checks](packs/project-checks/README.md) | Seven `$check-*` skills | Audit the change, real behavior, implementation, security, performance, interface, and release |
+| [Project Checks](packs/project-checks/README.md) | Seven `$check-*` skills and `$repo-polisher` | Audit the change, behavior, implementation, security, performance, interface, and release; improve repository presentation |
 
 ### Complete bundle
 
-`dist/GiftedLoser-Skills-Complete.zip` contains all nine skills. Use it when you want the full idea-to-release workflow.
+`dist/GiftedLoser-Skills-Complete.zip` contains all ten skills. Use it when you want the full idea-to-release workflow plus repository polishing.
 
 The pack ZIPs remain available when you want only one part:
 
@@ -47,7 +47,8 @@ The pack ZIPs remain available when you want only one part:
 | “Could someone misuse or break this?” | `$check-sec` | Practical security defects, unsafe trust assumptions, and clearly separated hardening advice |
 | “Why is this slow?” | `$check-performance` | Measured bottlenecks, expected benefits, and exact measurements to rerun after fixes |
 | “Does the interface feel finished?” | `$check-polish` | Real UI testing for visual quality, interaction, responsiveness, accessibility, and platform behavior |
-| “Can I confidently ship this?” | `$check-release` | A GO/NO-GO covering repository presentation, docs, versions, build, packaging, installation, upgrades, signing, and removal |
+| “Can I confidently ship this?” | `$check-release` | A GO, GO WITH RISKS, NO-GO, or unavailable decision covering docs, versions, build, packaging, installation, upgrades, signing, and removal |
+| “Make this repository look credible and complete.” | `$repo-polisher` | Evidence-backed README, metadata, documentation, template, and hygiene improvements |
 
 ## The project handoff
 
@@ -82,24 +83,54 @@ mkdir -p ~/.codex/skills
 cp -R ./* ~/.codex/skills/
 ```
 
-Start a fresh Codex task after installation so the skill catalog reloads. Every skill is explicit-only; invoke one by name, such as:
+Start a fresh Codex task after installation so the skill catalog reloads. Codex routes these skills from natural intent; invoke one explicitly when you want to override routing:
 
 ```text
 $new-idea
 ```
 
-## Rebuilding distribution ZIPs
+## Quick start
+
+State the outcome in normal language. For example:
+
+```text
+Pressure-test this app idea before I build it.
+Audit the changes on this branch for regressions.
+Improve this repository's README and metadata.
+```
+
+Codex selects the narrowest matching skill. Use `$skill-name` when you want to force a specific workflow.
+
+## Configuration
+
+The collection has no runtime environment variables or repository-level configuration. Each skill's routing metadata lives in its `agents/openai.yaml`; start a fresh Codex task after installing or updating a skill so Codex reloads it.
+
+## Development
+
+Edit source skills under `packs/*/skills/`. Keep each `SKILL.md` and its `agents/openai.yaml` aligned, then rebuild the committed distribution archives:
 
 ```powershell
-.\scripts\build-dist.ps1        # rebuild all three ZIPs
-.\scripts\build-dist.ps1 -Check # fail when a committed ZIP is stale
+.\scripts\build-dist.ps1
 ```
+
+### Testing distributions
+
+Verify that all three ZIPs match the current source tree:
+
+```powershell
+.\scripts\build-dist.ps1 -Check
+```
+
+The command exits with an error when an archive is missing or stale.
 
 ## Operating model
 
 - `$new-idea` may create or update only `docs/PROJECT.md`.
+- `READY FOR PROJECT-INIT` records readiness but does not authorize initialization or building.
 - `$project-init` may establish or normalize the repository but never publishes without explicit authorization.
 - Every `$check-*` skill is audit-only and never repairs, commits, pushes, publishes, or deploys.
+- Audit skills require clear audit intent and never run as an automatic suite.
+- `$repo-polisher` handles repository presentation and hygiene, not UI polish or code auditing.
 - Findings distinguish confirmed defects, likely risks, and verification gaps.
 - Missing execution evidence lowers confidence instead of being presented as success.
 
@@ -118,13 +149,17 @@ skills/
 │   └── project-checks/
 │       ├── README.md
 │       └── skills/
-│           └── check-*/
+│           ├── check-*/
+│           └── repo-polisher/
 ├── dist/
 │   ├── GiftedLoser-Project-Start.zip
 │   ├── GiftedLoser-Project-Checks.zip
 │   └── GiftedLoser-Skills-Complete.zip
 ├── scripts/
 │   └── build-dist.ps1
+├── .gitattributes
+├── .gitignore
+├── LICENSE
 └── README.md
 ```
 

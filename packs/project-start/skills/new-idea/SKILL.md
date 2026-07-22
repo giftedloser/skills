@@ -1,6 +1,6 @@
 ---
 name: new-idea
-description: Pressure-test a rough project idea and supplied conversations, notes, mockups, or planning files; expose contradictions, missing decisions, unnecessary scope, weak value, and feasibility risks honestly; ask focused questions only when needed; and produce an approved docs/PROJECT.md handoff for $project-init. Use only when the user explicitly invokes $new-idea.
+description: Do not use to initialize, scaffold, or build an already-decided project. Use when the user wants to explore or pressure-test a rough idea, supplied conversations, notes, mockups, or planning files; expose contradictions and missing decisions; and, when appropriate, write only docs/PROJECT.md. Explicit $new-idea always invokes it.
 ---
 
 # new-idea
@@ -97,10 +97,4 @@ Create additional files under `docs/specs/` only when the user explicitly reques
 
 ## Completion
 
-Report the verdict, strongest reason to build or not build, material decisions made, unresolved items, and the path written. When status is `READY FOR PROJECT-INIT`, end with this exact next step:
-
-```text
-$project-init
-
-Use docs/PROJECT.md as the source of truth.
-```
+Report the verdict, strongest reason to build or not build, material decisions made, unresolved items, and the path written. `READY FOR PROJECT-INIT` means the handoff is coherent; it does not authorize initialization or building. Proceed only when the original request already includes that work or the user asks afterward.

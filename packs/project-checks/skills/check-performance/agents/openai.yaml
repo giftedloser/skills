@@ -1,7 +1,7 @@
 interface:
-  display_name: Check Performance
-  short_description: Audit-only. Measured performance audit. No finding above MEDIUM without a number.
-  default_prompt: Use $check-performance to audit performance with measured evidence.
+  display_name: "Check Performance"
+  short_description: "Measure one workflow for real bottlenecks"
+  default_prompt: "Use $check-performance to measure one named workflow and identify its actual bottleneck."
 
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

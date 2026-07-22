@@ -1,6 +1,6 @@
 ---
 name: check-sec
-description: Audit a repository for practical, exploitable security defects and unsafe trust assumptions. Use when the user explicitly invokes $check-sec or requests this named security audit; separate exploitable defects from theoretical hardening.
+description: Do not use when security is mentioned in passing, for secure implementation requests, or for general code review. Use only when the user clearly asks for a security audit or threat review focused on practical exploitable defects and unsafe trust assumptions. Explicit $check-sec always invokes it.
 ---
 
 # check-sec
@@ -48,11 +48,6 @@ Follow the audit contract and include the scoping decision and a brief trust-bou
 Scope remediation to exploitable defects first.
 
 Every exploitable defect uses the full finding schema. A hardening suggestion uses the full schema when it identifies a concrete, actionable risk. Optional defense-in-depth hygiene without a specific failure path belongs in a short `Hardening notes` list, is `INFORMATIONAL`, and is not counted as a defect.
-
-## Subagents
-
-`security-reviewer` when the repository has meaningful security-sensitive behavior. `explorer` when boundary mapping is complex. A subagent's claim is never evidence — verify against code.
-
 
 ---
 

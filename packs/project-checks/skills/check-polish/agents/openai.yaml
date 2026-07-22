@@ -1,7 +1,7 @@
 interface:
-  display_name: Check Polish
-  short_description: Audit-only. UI/UX, responsiveness, accessibility, and interaction quality by running the interface. NOT APPLICABLE for non-UI repos.
-  default_prompt: Use $check-polish to audit UI, UX, accessibility, and interaction quality.
+  display_name: "Check Polish"
+  short_description: "Audit UI quality through real interaction"
+  default_prompt: "Use $check-polish to audit this existing interface for UI, UX, accessibility, and interaction defects."
 
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

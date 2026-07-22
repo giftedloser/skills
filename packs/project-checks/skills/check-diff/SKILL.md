@@ -1,6 +1,6 @@
 ---
 name: check-diff
-description: Audit a branch, pull-request range, commit range, staged changes, or working-tree diff for defects and regressions introduced by that change. Use when the user explicitly invokes $check-diff or requests this named change review; inspect surrounding context as needed but leave broad repository health to $check-code.
+description: Do not use for broad repository health, end-to-end behavior, or ordinary implementation. Use only when the user clearly asks to audit or review a specific branch, pull request, commit range, staged change, or working-tree diff for change-caused defects and regressions. Explicit $check-diff always invokes it.
 ---
 
 # check-diff
@@ -60,11 +60,6 @@ Follow the audit contract. Additionally report:
 - tests only when the diff changes meaningful behavior.
 
 Local outcome rule: return `BLOCKED` when no reliable baseline or meaningful diff exists, or when the defining review cannot run. Partial coverage cannot produce a full `PASS`.
-
-## Subagents
-
-Use `reviewer` when the diff is substantial enough to benefit. Use `explorer` only when changed-flow mapping is complex. A subagent claim is never evidence—verify it against the repository, de-duplicate findings, and preserve the diff boundary.
-
 
 ---
 

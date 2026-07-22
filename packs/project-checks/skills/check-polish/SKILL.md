@@ -1,6 +1,6 @@
 ---
 name: check-polish
-description: Audit a product interface for UI and UX quality, responsiveness, accessibility, and interaction defects by running it. Use when the user explicitly invokes $check-polish or requests this named interface audit; return NOT APPLICABLE for repositories without a UI.
+description: Do not use to implement or restyle a UI, polish repository documentation, or react to passing comments about appearance. Use only when the user clearly asks for an audit of an existing product interface covering UI, UX, responsiveness, accessibility, or interaction defects. Explicit $check-polish always invokes it.
 ---
 
 # check-polish
@@ -39,11 +39,6 @@ React projects only, supporting evidence only. Never replaces visual and interac
 ## Output
 
 Follow the audit contract. Report CORE and CONDITIONAL coverage separately and identify the affected screen, interaction, viewport, and screenshot for each visual finding when available. Name the exact views and interactions to retest after remediation.
-
-## Subagents
-
-`ui-polisher` when the UI is substantial enough to benefit. `explorer` only when UI flow mapping is complicated.
-
 
 ---
 

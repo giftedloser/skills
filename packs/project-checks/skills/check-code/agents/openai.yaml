@@ -1,7 +1,7 @@
 interface:
-  display_name: Check Code
-  short_description: Audit-only. Implementation soundness - correctness, reliability, data integrity, code quality, no slop.
-  default_prompt: Use $check-code to audit implementation correctness, reliability, and production readiness.
+  display_name: "Check Code"
+  short_description: "Audit focused implementation correctness"
+  default_prompt: "Use $check-code to audit a declared module or the three most critical paths."
 
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

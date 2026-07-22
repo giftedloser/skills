@@ -1,7 +1,7 @@
 interface:
   display_name: "Check Diff"
-  short_description: "Audit-only review of defects introduced by a Git diff."
-  default_prompt: "Use $check-diff to audit this branch or working-tree change and produce a focused remediation prompt for a separate correction session."
+  short_description: "Audit defects introduced by a selected diff"
+  default_prompt: "Use $check-diff to audit this branch or working-tree change for change-caused defects."
 
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

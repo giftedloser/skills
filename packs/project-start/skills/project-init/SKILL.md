@@ -1,6 +1,6 @@
 ---
 name: project-init
-description: Initialize a new software project from an empty directory or normalize an existing repository without destroying valid work. Use when the user explicitly invokes $project-init or asks for this named setup workflow; new repositories may receive an initial Git commit, but the skill never publishes or changes global Codex configuration.
+description: Do not use for discussion-only ideation or ordinary feature implementation in an established project. Use when the user asks to create, scaffold, initialize, or normalize a software repository without destroying valid work. New repositories may receive an initial Git commit, but never publish or change global Codex configuration. Explicit $project-init always invokes it.
 ---
 
 # project-init
@@ -51,7 +51,7 @@ Create or improve the repository AGENTS.md with only real, verified content: pro
 
 ### 5. Repo-local Codex config (only when justified)
 
-`.codex/config.toml`, `.codex/rules/*.rules`, `.codex/agents/*.toml` only when the project has a real recurring need. Rules must be narrow, project-specific, based on commands that exist, limited to trusted repository work. Never broad, never global. No project agents unless the project has a recurring specialized role the five retained global agents (explorer, reviewer, security-reviewer, ui-polisher, release-captain) don't cover.
+`.codex/config.toml`, `.codex/rules/*.rules`, `.codex/agents/*.toml` only when the project has a real recurring need. Rules must be narrow, project-specific, based on commands that exist, limited to trusted repository work. Never broad, never global. Do not create project agents unless a recurring project-specific need cannot be served by built-in generic workers or the built-in read-heavy investigation role.
 
 ### 6. Commands
 
@@ -65,18 +65,14 @@ For an empty directory or newly initialized repository: initialize Git when need
 
 Only when requested. Default new repositories to **private** when visibility is unspecified. Verify the selected account and remote before any operation. No duplicate repo creation, no unrelated files published, push only when authorized.
 
-### 9. Verify — existence, not behavior
+### 9. Verify proportionately
 
-Confirm the structure builds/parses at the shallowest meaningful level (e.g., dependency install resolves, entry point compiles). **Deep behavioral verification is not this skill's job** — end the report by directing the user to `$check-work` for end-to-end proof. Do not duplicate the audit suite here.
+Confirm the structure builds or parses at the shallowest meaningful level, such as dependency resolution or entry-point compilation. Run only the checks proportionate to the initialization performed. Do not chain an audit skill automatically; a formal behavioral audit requires clear user intent.
 
 ## Output
 
-Report: detected prior state, project handoff used or absent, files created, files changed, stack and tooling selected, Git state, GitHub state, commands verified, checks passed, unresolved decisions, real residual risks. One line pointing to `$check-work` for behavioral verification.
+Report: detected prior state, project handoff used or absent, files created, files changed, stack and tooling selected, Git state, GitHub state, commands verified, checks passed, unresolved decisions, and real residual risks.
 
 ## Completion criteria
 
-Structure matches the goal and any approved handoff, blocking handoff status was respected, existing work preserved, AGENTS.md contains only real verified instructions, no invented commands, no global Codex changes, failures clearly reported.
-
-## Subagents
-
-`explorer` when an existing repository needs substantial mapping. Others only when the project materially benefits. No fan-out for simple initialization.
+Structure matches the goal and any approved handoff, blocking handoff status was respected, existing work preserved, AGENTS.md contains only real verified instructions, no invented commands, no global Codex changes, failures clearly reported, proportionate verification completed, and residual risk stated.

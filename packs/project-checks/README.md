@@ -1,6 +1,6 @@
 # Project Checks
 
-Seven focused, audit-only Codex skills for building confidence without letting the checker silently repair what it grades.
+Seven focused audit skills plus one productive repository-polishing skill. Codex routes the narrowest match from natural intent; explicit `$name` remains an override.
 
 ## Included skills
 
@@ -12,14 +12,17 @@ Seven focused, audit-only Codex skills for building confidence without letting t
 | `$check-sec` | Practical security defects and unsafe trust assumptions |
 | `$check-performance` | Measured bottlenecks and quantified expected benefits |
 | `$check-polish` | UI, UX, responsiveness, accessibility, and interaction quality |
-| `$check-release` | Repository and product release readiness with a final GO/NO-GO |
+| `$check-release` | One candidate's release readiness with GO, GO WITH RISKS, NO-GO, or decision unavailable |
+| `$repo-polisher` | Evidence-backed repository documentation, metadata, templates, and hygiene improvements |
 
 ## Audit contract
 
-The checks report `PASS`, `PASS WITH RISKS`, or `FAIL`; `$check-diff` may return `BLOCKED`, and `$check-polish` may return `NOT APPLICABLE`. Every finding is a `CONFIRMED DEFECT`, `LIKELY RISK`, or `VERIFICATION GAP` backed by evidence.
+The checks report `PASS`, `PASS WITH RISKS`, `FAIL`, `BLOCKED`, or `NOT APPLICABLE`, with mode `EXECUTED`, `STATIC ONLY`, or `SUPPLIED EVIDENCE`. Every finding is a `CONFIRMED DEFECT`, `LIKELY RISK`, or `VERIFICATION GAP` backed by evidence.
 
 They never edit source, install dependencies, commit, push, publish, deploy, or trigger release automation.
 
+Audit skills route only on a clear request to audit. Ambiguous mentions of speed, security, shipping, polish, or correctness do not trigger them, and they never run as an automatic suite. `$repo-polisher` may route on a direct request to improve repository presentation and can apply safe documentation and hygiene changes.
+
 ## Install this pack
 
-Extract `dist/GiftedLoser-Project-Checks.zip` and copy the seven skill folders into `~/.codex/skills`. Start a fresh Codex task before invoking them.
+Extract `dist/GiftedLoser-Project-Checks.zip` and copy the eight skill folders into `~/.codex/skills`. Start a fresh Codex task so automatic routing and explicit overrides use the new definitions.

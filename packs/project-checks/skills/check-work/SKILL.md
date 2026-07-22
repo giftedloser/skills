@@ -1,6 +1,6 @@
 ---
 name: check-work
-description: Verify that a requested product or feature is genuinely implemented and works end to end from the user's perspective. Use when the user explicitly invokes $check-work or requests this named behavioral audit; run the real product and verify user-visible results.
+description: Do not use for ordinary implementation, code-quality review, or an unspecified request to check a project. Use only when the user clearly asks to audit or verify named end-to-end user workflows by running the real product and observing user-visible results. Explicit $check-work always invokes it.
 ---
 
 # check-work
@@ -44,11 +44,6 @@ Follow the audit contract and report `MODE`. Include:
 | `<workflow>` | `WORKING | PARTIAL | BROKEN | UNVERIFIED` | `<executed or supplied proof>` |
 
 Return `BLOCKED` when meaningful behavioral verification is unavailable. The remediation prompt, when needed, must name the exact workflows to re-exercise.
-
-## Subagents
-
-`explorer` for complicated flow tracing. `reviewer` when regression analysis materially helps. No unnecessary fan-out.
-
 
 ---
 
