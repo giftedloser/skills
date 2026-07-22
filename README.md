@@ -63,66 +63,6 @@ Its only project mutation is an approved `docs/PROJECT.md` with one status:
 
 `$project-init` looks for that handoff automatically. When present, it respects the status and uses the document as approved product intent while verifying technical claims against the repository. When absent, initialization behaves normally; `$new-idea` is always optional.
 
-## Installation
-
-Download and extract the desired ZIP, then copy the contained skill folders into your personal Codex skills directory.
-
-> [!WARNING]
-> These commands overwrite installed skills with the same folder names. Back up any local modifications first.
-
-### Windows PowerShell
-
-```powershell
-New-Item -ItemType Directory -Force "$env:USERPROFILE\.codex\skills" | Out-Null
-Copy-Item -Recurse -Force .\* "$env:USERPROFILE\.codex\skills\"
-```
-
-### macOS or Linux
-
-```bash
-mkdir -p ~/.codex/skills
-cp -R ./* ~/.codex/skills/
-```
-
-Start a fresh Codex task after installation so the skill catalog reloads. Codex routes these skills from natural intent; invoke one explicitly when you want to override routing:
-
-```text
-$new-idea
-```
-
-## Quick start
-
-State the outcome in normal language. For example:
-
-```text
-Pressure-test this app idea before I build it.
-Audit the changes on this branch for regressions.
-Improve this repository's README and metadata.
-```
-
-Codex selects the narrowest matching skill. Use `$skill-name` when you want to force a specific workflow.
-
-## Configuration
-
-The collection has no runtime environment variables or repository-level configuration. Each skill's routing metadata lives in its `agents/openai.yaml`; start a fresh Codex task after installing or updating a skill so Codex reloads it.
-
-## Development
-
-Edit source skills under `packs/*/skills/`. Keep each `SKILL.md` and its `agents/openai.yaml` aligned, then rebuild the committed distribution archives:
-
-```powershell
-.\scripts\build-dist.ps1
-```
-
-### Testing distributions
-
-Verify that all four ZIPs match the current source tree:
-
-```powershell
-.\scripts\build-dist.ps1 -Check
-```
-
-The command exits with an error when an archive is missing or stale.
 
 ## Operating model
 
