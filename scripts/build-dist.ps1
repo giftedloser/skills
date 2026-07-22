@@ -14,10 +14,15 @@ $archives = @(
         Sources = @((Join-Path $repoRoot "packs/project-checks/skills"))
     },
     @{
+        Name = "GiftedLoser-Project-Polish.zip"
+        Sources = @((Join-Path $repoRoot "packs/project-polish/skills"))
+    },
+    @{
         Name = "GiftedLoser-Skills-Complete.zip"
         Sources = @(
             (Join-Path $repoRoot "packs/project-start/skills"),
-            (Join-Path $repoRoot "packs/project-checks/skills")
+            (Join-Path $repoRoot "packs/project-checks/skills"),
+            (Join-Path $repoRoot "packs/project-polish/skills")
         )
     }
 )
