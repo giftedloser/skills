@@ -1,6 +1,5 @@
 # GiftedLoser Skills
 
-> From a rough idea to a release decision, with evidence at every step.
 
 ![Skills](https://img.shields.io/badge/skills-10-6d5dfc)
 ![Packs](https://img.shields.io/badge/packs-3-167d68)
