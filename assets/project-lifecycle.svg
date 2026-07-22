@@ -1,11 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 550" role="img" aria-labelledby="title desc">
-  <title id="title">Project lifecycle from idea to release</title>
-  <desc id="desc">An idea is challenged by new-idea, initialized by project-init, built and reviewed by check-diff and check-work, examined by four confidence checks, then passed through check-release before release.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
+  <title id="title">An example workflow across the skills</title>
+  <desc id="desc">A sample flow. Groundwork uses new-idea and project-init. Build is a fresh build or a new branch. When the six confidence checks pass (check-diff, check-work, check-code, check-sec, check-performance, check-polish), repo-polisher tidies the repository, check-release gates the ship, then Release. The skills are independent and no order is required.</desc>
   <style>
     text { font-family: Inter, ui-sans-serif, system-ui, sans-serif; fill: #20232a; text-anchor: middle; }
     .step, .skill { font-weight: 600; font-size: 16px; }
     .detail { font-weight: 400; font-size: 13px; fill: #5d6470; }
-    .group { font-weight: 600; font-size: 15px; fill: #5d6470; }
+    .sub { font-weight: 400; font-size: 14px; fill: #5d6470; }
+    .group { font-weight: 700; font-size: 12px; fill: #5d6470; letter-spacing: 0.08em; }
     .node { stroke-width: 2; }
     .idea { fill: #f4f4f5; stroke: #71717a; }
     .start { fill: #eeeafd; stroke: #6d5dfc; }
@@ -13,16 +14,29 @@
     .check { fill: #e7f6f1; stroke: #167d68; }
     .gate { fill: #fff2df; stroke: #c47716; }
     .release { fill: #e9f1ff; stroke: #3974c6; }
+    .polish { fill: #fce7ce; stroke: #c47716; }
+    .n-idea { fill: #52525b; }
+    .n-start { fill: #5b4ee0; }
+    .n-build { fill: #2f63b0; }
+    .n-check { fill: #12705d; }
+    .n-gate { fill: #a5620f; }
+    .n-release { fill: #2f63b0; }
+    .n-polish { fill: #a5620f; }
     .edge { fill: none; stroke: #737a86; stroke-width: 2; marker-end: url(#arrow); }
     .branch { fill: none; stroke: #737a86; stroke-width: 2; }
     @media (prefers-color-scheme: dark) {
       text { fill: #f2f3f5; }
-      .detail, .group { fill: #bcc1ca; }
+      .detail, .group, .sub { fill: #bcc1ca; }
       .idea { fill: #292a2f; stroke: #a1a1aa; }
       .start { fill: #302a50; stroke: #9b8cff; }
       .build, .release { fill: #203555; stroke: #73a7ee; }
       .check { fill: #193d35; stroke: #46b596; }
-      .gate { fill: #4a351b; stroke: #e1a34d; }
+      .gate, .polish { fill: #4a351b; stroke: #e1a34d; }
+      .n-idea { fill: #d4d4d8; }
+      .n-start { fill: #b3a6ff; }
+      .n-build, .n-release { fill: #8fbaf0; }
+      .n-check { fill: #5cc7a8; }
+      .n-gate, .n-polish { fill: #eab866; }
       .edge, .branch { stroke: #aeb4bd; }
     }
   </style>
@@ -32,47 +46,78 @@
     </marker>
   </defs>
 
-  <path class="edge" d="M150 80H174"/><path class="edge" d="M334 80H358"/><path class="edge" d="M518 80H542"/><path class="edge" d="M702 80H726"/><path class="edge" d="M886 80H910"/>
+  <text class="sub" x="600" y="22">An example flow. The skills are independent, so pull in only what a moment needs.</text>
 
-  <rect class="node idea" x="10" y="30" width="140" height="100" rx="12"/>
-  <text x="80" y="61"><tspan class="step" x="80">1. Idea</tspan><tspan class="detail" x="80" dy="26">Goal, user, value</tspan></text>
+  <text class="group" x="284" y="46">GROUNDWORK</text>
+  <text class="group" x="663" y="46">BUILD</text>
 
-  <rect class="node start" x="174" y="30" width="160" height="100" rx="12"/>
-  <text x="254" y="55"><tspan class="step" x="254">2. Challenge it</tspan><tspan class="skill" x="254" dy="25">$new-idea</tspan><tspan class="detail" x="254" dy="22">Honest project handoff</tspan></text>
+  <path class="edge" d="M170 108H196"/>
+  <path class="edge" d="M356 108H382"/>
+  <path class="edge" d="M542 108H568"/>
 
-  <rect class="node start" x="358" y="30" width="160" height="100" rx="12"/>
-  <text x="438" y="55"><tspan class="step" x="438">3. Foundation</tspan><tspan class="skill" x="438" dy="25">$project-init</tspan><tspan class="detail" x="438" dy="22">Structure, tooling, Git</tspan></text>
+  <rect class="node idea" x="40" y="58" width="130" height="100" rx="12"/>
+  <text x="105" y="100"><tspan class="step n-idea" x="105">Idea</tspan><tspan class="detail" x="105" dy="24">Goal, user, value</tspan></text>
 
-  <rect class="node build" x="542" y="30" width="160" height="100" rx="12"/>
-  <text x="622" y="61"><tspan class="step" x="622">4. Build</tspan><tspan class="detail" x="622" dy="26">Create the product</tspan></text>
+  <rect class="node start" x="196" y="58" width="160" height="100" rx="12"/>
+  <text x="276" y="100"><tspan class="skill n-start" x="276">$new-idea</tspan><tspan class="detail" x="276" dy="24">Pressure-test the idea</tspan></text>
 
-  <rect class="node check" x="726" y="30" width="160" height="100" rx="12"/>
-  <text x="806" y="55"><tspan class="step" x="806">5. Review change</tspan><tspan class="skill" x="806" dy="25">$check-diff</tspan><tspan class="detail" x="806" dy="22">Regressions and hygiene</tspan></text>
+  <rect class="node start" x="382" y="58" width="160" height="100" rx="12"/>
+  <text x="462" y="100"><tspan class="skill n-start" x="462">$project-init</tspan><tspan class="detail" x="462" dy="24">Structure, tooling, Git</tspan></text>
 
-  <rect class="node check" x="910" y="30" width="180" height="100" rx="12"/>
-  <text x="1000" y="55"><tspan class="step" x="1000">6. Prove it works</tspan><tspan class="skill" x="1000" dy="25">$check-work</tspan><tspan class="detail" x="1000" dy="22">Real user workflows</tspan></text>
+  <rect class="node build" x="568" y="58" width="190" height="100" rx="12"/>
+  <text x="663" y="100"><tspan class="step n-build" x="663">Build</tspan><tspan class="detail" x="663" dy="24">Fresh build or new branch</tspan></text>
 
-  <text class="group" x="600" y="190">7. Build confidence — choose what applies</text>
-  <path class="branch" d="M1000 130V210H210V235"/><path class="branch" d="M1000 210H470V235"/><path class="branch" d="M1000 210H730V235"/><path class="edge" d="M1000 210H990V235"/>
+  <path class="branch" d="M663 158V214"/>
+  <path class="branch" d="M128 214H1072"/>
+  <path class="edge" d="M128 214V250"/>
+  <path class="edge" d="M316 214V250"/>
+  <path class="edge" d="M505 214V250"/>
+  <path class="edge" d="M694 214V250"/>
+  <path class="edge" d="M883 214V250"/>
+  <path class="edge" d="M1072 214V250"/>
 
-  <rect class="node check" x="100" y="235" width="220" height="100" rx="12"/>
-  <text x="210" y="270"><tspan class="skill" x="210">$check-code</tspan><tspan class="detail" x="210" dy="25">Correct and reliable</tspan></text>
+  <text class="group" x="300" y="186">CONFIDENCE CHECKS</text>
 
-  <rect class="node check" x="360" y="235" width="220" height="100" rx="12"/>
-  <text x="470" y="270"><tspan class="skill" x="470">$check-sec</tspan><tspan class="detail" x="470" dy="25">Safe against real threats</tspan></text>
+  <rect class="node check" x="41" y="250" width="173" height="100" rx="12"/>
+  <text x="128" y="292"><tspan class="skill n-check" x="128">$check-diff</tspan><tspan class="detail" x="128" dy="24">Regressions, hygiene</tspan></text>
 
-  <rect class="node check" x="620" y="235" width="220" height="100" rx="12"/>
-  <text x="730" y="270"><tspan class="skill" x="730">$check-performance</tspan><tspan class="detail" x="730" dy="25">Measured speed and scale</tspan></text>
+  <rect class="node check" x="230" y="250" width="173" height="100" rx="12"/>
+  <text x="316" y="292"><tspan class="skill n-check" x="316">$check-work</tspan><tspan class="detail" x="316" dy="24">Real user workflows</tspan></text>
 
-  <rect class="node check" x="880" y="235" width="220" height="100" rx="12"/>
-  <text x="990" y="270"><tspan class="skill" x="990">$check-polish</tspan><tspan class="detail" x="990" dy="25">Accessible and finished</tspan></text>
+  <rect class="node check" x="419" y="250" width="173" height="100" rx="12"/>
+  <text x="505" y="292"><tspan class="skill n-check" x="505">$check-code</tspan><tspan class="detail" x="505" dy="24">Correct, reliable</tspan></text>
 
-  <path class="branch" d="M210 335V380H600"/><path class="branch" d="M470 335V380H600"/><path class="branch" d="M730 335V380H600"/><path class="branch" d="M990 335V380H600"/><path class="edge" d="M600 380V405"/>
+  <rect class="node check" x="608" y="250" width="173" height="100" rx="12"/>
+  <text x="694" y="292"><tspan class="skill n-check" x="694">$check-sec</tspan><tspan class="detail" x="694" dy="24">Safe against threats</tspan></text>
 
-  <rect class="node gate" x="450" y="405" width="300" height="90" rx="12"/>
-  <text x="600" y="434"><tspan class="step" x="600">8. Release gate</tspan><tspan class="skill" x="600" dy="25">$check-release</tspan><tspan class="detail" x="600" dy="21">Docs, versions, build, package, install</tspan></text>
+  <rect class="node check" x="797" y="250" width="173" height="100" rx="12"/>
+  <text x="883" y="292"><tspan class="skill n-check" x="883" style="font-size:15px">$check-performance</tspan><tspan class="detail" x="883" dy="24">Speed and scale</tspan></text>
 
-  <path class="edge" d="M750 450H824"/>
-  <rect class="node release" x="824" y="405" width="210" height="90" rx="12"/>
-  <text x="929" y="440"><tspan class="step" x="929">9. Release</tspan><tspan class="detail" x="929" dy="25">Ship with evidence</tspan></text>
+  <rect class="node check" x="986" y="250" width="173" height="100" rx="12"/>
+  <text x="1072" y="292"><tspan class="skill n-check" x="1072">$check-polish</tspan><tspan class="detail" x="1072" dy="24">Accessible, finished</tspan></text>
+
+  <text class="detail" x="600" y="372">when checks pass</text>
+  <path class="branch" d="M128 350V388"/>
+  <path class="branch" d="M316 350V388"/>
+  <path class="branch" d="M505 350V388"/>
+  <path class="branch" d="M694 350V388"/>
+  <path class="branch" d="M883 350V388"/>
+  <path class="branch" d="M1072 350V388"/>
+  <path class="branch" d="M128 388H1072"/>
+
+  <text class="group" x="250" y="422">POLISH</text>
+  <text class="group" x="520" y="422">SHIP</text>
+
+  <path class="edge" d="M335 388V430"/>
+
+  <rect class="node polish" x="230" y="430" width="210" height="96" rx="12"/>
+  <text x="335" y="470"><tspan class="skill n-polish" x="335">$repo-polisher</tspan><tspan class="detail" x="335" dy="24">README, badges, metadata</tspan></text>
+
+  <path class="edge" d="M440 478H490"/>
+  <rect class="node gate" x="490" y="430" width="300" height="96" rx="12"/>
+  <text x="640" y="470"><tspan class="skill n-gate" x="640">$check-release</tspan><tspan class="detail" x="640" dy="24">Docs, build, install, signing</tspan></text>
+
+  <path class="edge" d="M790 478H840"/>
+  <rect class="node release" x="840" y="430" width="200" height="96" rx="12"/>
+  <text x="940" y="470"><tspan class="step n-release" x="940">Release</tspan><tspan class="detail" x="940" dy="24">Ship with evidence</tspan></text>
 </svg>
