@@ -1,7 +1,7 @@
 interface:
   display_name: "Repo Polisher"
-  short_description: "Cosmetic repository polish — identity, README craft, diagrams, templates, and metadata, evidence-backed and per-project."
-  default_prompt: "Use $repo-polisher to elevate this repository's presentation and identity without changing source behavior."
+  short_description: "Evidence-led repository presentation without generic filler."
+  default_prompt: "Use $repo-polisher to make this repository clearer, more credible, and more distinctive without changing its behavior or inventing claims."
 
 policy:
   allow_implicit_invocation: true

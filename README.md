@@ -22,7 +22,7 @@ Describe the result you want. Codex routes the narrowest applicable skill, and a
 |---|---|---|
 | [Project Start](packs/project-start/README.md) | `$new-idea`, `$project-init` | Challenge the idea, create an approved project handoff, and establish the repository safely |
 | [Project Checks](packs/project-checks/README.md) | Seven `$check-*` skills | Audit the change, behavior, implementation, security, performance, interface, and release |
-| [Project Polish](packs/project-polish/README.md) | `$repo-polisher` | Improve repository identity, README craft, diagrams, templates, badges, and metadata without changing source behavior |
+| [Project Polish](packs/project-polish/README.md) | `$repo-polisher` | Improve README clarity and repository identity with evidence-led, presentation-only changes |
 
 
 ## Skills at a glance
@@ -38,7 +38,7 @@ Describe the result you want. Codex routes the narrowest applicable skill, and a
 | “Why is this slow?” | `$check-performance` | Measured bottlenecks, expected benefits, and exact measurements to rerun after fixes |
 | “Does the interface feel finished?” | `$check-polish` | Real UI testing for visual quality, interaction, responsiveness, accessibility, and platform behavior |
 | “Can I ship this?” | `$check-release` | A `GO`, `GO WITH RISKS`, `NO-GO`, or `unavailable` decision covering docs, versions, build, packaging, installation, upgrades, signing, and removal |
-| “Make this repository look complete.” | `$repo-polisher` | Repository identity, README craft, diagrams, badges, templates, and metadata, grounded in evidence |
+| “Make this repository clearer and more credible.” | `$repo-polisher` | Focused README and repository presentation improvements grounded in evidence, including a no-change result when appropriate |
 
 
 ## The project handoff
@@ -61,7 +61,7 @@ Its only project mutation is an approved `docs/PROJECT.md` with one status:
 - `$project-init` may establish or normalize the repository but never publishes without explicit authorization.
 - Every `$check-*` skill is audit-only and never repairs, commits, pushes, publishes, or deploys.
 - Audit skills require clear audit intent and never run as an automatic suite.
-- `$repo-polisher` handles cosmetic repository presentation and identity, not product UI, code behavior, or release decisions.
+- `$repo-polisher` handles repository presentation and identity, not product UI, code behavior, or release decisions. Its dependency-free Python scanner collects repeatable evidence; it never grades the repository or turns missing conventional files into automatic work.
 - Findings distinguish confirmed defects, likely risks, and verification gaps.
 - Missing execution evidence lowers confidence instead of being presented as success.
 
@@ -97,5 +97,4 @@ skills/
 ├── LICENSE
 └── README.md
 ```
-
 

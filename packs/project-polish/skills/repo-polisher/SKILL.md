@@ -1,65 +1,67 @@
 ---
 name: repo-polisher
-description: Do not use for UI polish, code correctness, security, performance, release-readiness audits, or feature implementation. Use when the user wants a repository to look finished, credible, and attractive — README craft, project identity (icon, title treatment), diagrams, collapsible structure, badges, templates, and metadata — tastefully and per-project. Cosmetic and presentational only; never changes source behavior, and every visible claim must trace to repository evidence. Ask before changing releases, versions, licenses, or public/private positioning. Explicit $repo-polisher always invokes it.
+description: >-
+  Do not use for product UI, code correctness, security, performance, release readiness, feature work, or generic repository hygiene. Use when the user wants an existing repository's public-facing presentation improved: README hierarchy and copy, project identity, evidence-backed visuals, diagrams, badges, or repository-facing metadata. Make only justified presentation changes, preserve the project's voice, and prefer no change over generic polish. Never change application behavior or invent claims. Ask before changing GitHub settings, licenses, versions, releases, visibility, or publishing. Explicit $repo-polisher always invokes it.
 ---
 
 # repo-polisher
 
-Make an existing repository look cared-for, credible, and worth landing on. This is presentation and identity work: the README, the project's visual identity, structure, diagrams, templates, and metadata. It is **cosmetic and additive**, never behavioral. It does not audit correctness (`$check-code`), gate a release (`$check-release`), or judge product UI (`$check-polish`); it makes the repository itself attractive and trustworthy.
+Make a repository easier to understand, trust, and remember without making it look AI-generated. Polish is editorial judgment, not a completeness checklist.
 
-## Two hard boundaries
+## Boundaries
 
-It **changes only presentation**: docs, README, assets, templates, metadata, and repository-surface files, never application source, logic, or build behavior. And it **never misrepresents**: every visible claim traces to repository evidence. Do not invent features, compatibility, benchmarks, customers, security posture, production readiness, package availability, roadmap commitments, or external integrations. No fabricated build badges, invented metrics, or fake stars. Prefer no claim over a weak one. Polish is enhancement, not a costume.
+Change only repository-facing presentation such as README files, documentation landing pages, visual assets, and user-requested community templates. Do not change source, dependencies, package scripts, build configuration, ignore rules, application UI, runtime behavior, releases, or deployment.
 
-## Ground the work in evidence
+Every claim must have a repository source. Do not infer production readiness, compatibility, performance, security, adoption, integrations, or availability from silence. Ask before changing licenses, versions, changelogs, package metadata, repository visibility, or any GitHub setting. Never push, publish, or deploy unless explicitly requested.
 
-Before writing, run `scripts/audit_repo.py` against the repository to inventory what actually exists — package files, README sections, placeholders, missing pieces — and use its output as the factual base for every claim and badge. Consult `references/repo-quality-checklist.md` for the quality bar, `references/file-templates.md` for baseline file scaffolds, and `references/release-versioning.md` when touching versions or changelogs. The script and references are the skill's grounding; do not assert anything they contradict.
+## Read before styling
 
-## Read the project before styling it
+1. Resolve the actual Git worktree root, read repository instructions, and inspect status from that root without disturbing existing work. When polishing a subdirectory, note pre-existing changes that overlap it; never call a scoped view "clean" without checking the worktree root.
+2. Resolve `scripts/audit_repo.py` relative to this `SKILL.md`, run it against the target repository, and treat its output as evidence—not a score or a to-do list.
+3. Read the existing README, relevant manifests, docs landing pages, screenshots, visual assets, and CI/release metadata needed to verify visible claims.
+4. Read [references/repo-quality-checklist.md](references/repo-quality-checklist.md).
+5. Identify the audience, the project's actual character, and the single largest presentation problem.
 
-Style follows the project; the project does not follow a template. Determine the repository's language, domain, maturity, audience, and existing visual identity first. A terminal utility, a data library, a design system, and a game each deserve a different voice. Match it. Detect and preserve an established aesthetic rather than overwriting it. Refine a strong identity; propose a fitting one only where none exists. Never impose a house style. Restraint is the default: the smallest set of changes that makes the repository read as intentional. More polish is not better polish.
+If the repository already communicates well, stop and say so. Missing files and short READMEs are not defects by themselves.
 
-## What it can enhance
+## Choose a direction
 
-**Identity:** a project icon, logo, or banner; a title treatment rendered as an SVG header when custom type is wanted (GitHub Markdown cannot set fonts directly); a consistent accent and iconography drawn from the project's own character.
+State a brief direction grounded in the project: what should become clearer, what existing character to preserve, and what will remain untouched. Ask only when multiple identity directions would materially change the result; otherwise proceed with the best-supported one.
 
-**README craft:** a clear hero and one-line value statement; scannable structure with a table of contents; a feature or comparison table; quickstart, install, and usage that match reality; tidy link sections. Lead with what the project is and why it matters, in its own terms.
+Use the smallest change set that fixes the main problem. Prefer editing, tightening, reordering, or deleting weak material before adding anything. A typical pass changes the README and, only when it earns its place, one visual asset. Do not create a documentation suite, template set, badge wall, logo system, or brand guide unless the repository genuinely needs it or the user asks.
 
-**Structure and density:** collapsible `<details>` sections to fold secondary content; column and card layouts via HTML `<table>` where they aid scanning; grouped sections so a long README stays navigable.
+## Craft rules
 
-**Diagrams:** Mermaid flowcharts, architecture, and sequence diagrams for real structure the project has. A diagram earns its place by replacing paragraphs, not decorating them.
+- Lead with a specific answer to: what is this, who is it for, and what can the reader do next?
+- Preserve strong existing copy, screenshots, identity, and project-specific language.
+- Replace generic claims such as "powerful," "seamless," "modern," and "production-ready" with concrete facts or delete them.
+- Include install, usage, configuration, development, testing, architecture, support, or contributing material only when that reader needs it and the repository proves it.
+- Keep commands exact and verify them through manifests, task files, CI, or a safe execution path. Do not invent or "standardize" commands.
+- Use badges only when each answers a likely reader question and its target resolves. Existing real CI does not require a badge.
+- Add a diagram only when real relationships are clearer visually than in prose. Keep labels project-specific and verify Mermaid syntax when used.
+- Add identity art only when it expresses something specific to the project. Prefer existing assets. Avoid generic gradients, glowing blobs, floating cards, stock mascots, decorative terminal chrome, emoji section labels, and ornamental SVG animation.
+- Use HTML tables and `<details>` only when they improve scanning or disclosure; never as default layout decoration.
+- Keep accessible alt text, readable contrast, sensible image dimensions, and useful light/dark behavior.
 
-**Motion, tastefully:** an animated SVG header, a short demo GIF or cast, a `<picture>` element swapping art between light and dark themes. A garnish with a low ceiling; one tasteful moment, never a carousel.
+## Evidence discipline
 
-**Badges:** accurate, resolvable badges only — license, version, release, language, real CI status. Verify each target resolves and reflects reality. A badge that lies is worse than none.
+Maintain a small working ledger of each new or materially rewritten claim and its source. If a claim cannot be supported, omit it or label the uncertainty plainly. Report invalid manifests, broken references, or suspected secrets to the user; do not repair them under this skill unless the repair is itself presentation-only and requested.
 
-**Templates and hygiene:** `CHANGELOG`, `LICENSE`, `CITATION.cff`, contributing and issue/PR templates, ignore-rule tidiness — added from `references/file-templates.md` when the project genuinely wants them, not as ceremony.
+Do not turn scanner observations into automatic changes. In particular, the absence of `SECURITY.md`, `CHANGELOG.md`, contribution templates, issue templates, a package manifest, a license, or conventional README sections is contextual—not proof of poor presentation.
 
-**Metadata and discoverability:** repository description and tagline; topics; homepage URL; social-preview image; and consistency of name, tagline, and description across the README, the package manifest, and the GitHub About panel.
+## Verify
 
-## Render only what GitHub renders
+Review the final diff for scope and voice. Then verify only what changed:
 
-GitHub Markdown is the primary target and it is constrained. Rely only on what renders: Mermaid fenced blocks, `<details>`/`<summary>`, `<img>` and inline SVG, `<table>` for layout, `<picture>` with `prefers-color-scheme`, and anchor-linked tables of contents. Do not propose what GitHub strips: no `<script>`, no external CSS, no custom web fonts in Markdown (use an SVG image for custom type). Richer treatments are fine on a docs site or Pages; keep the README within what GitHub renders so it never shows broken markup.
+- local README links and images resolve;
+- edited commands and visible claims trace to evidence;
+- badges and external links resolve when network access is available;
+- Mermaid or SVG parses when added;
+- images remain legible at GitHub desktop and narrow widths;
+- no unrelated content or user work was removed.
 
-## Workflow
-
-1. Run `scripts/audit_repo.py`; read its inventory and the references.
-2. Inspect language, domain, audience, existing README and assets, package manifest, and current GitHub metadata where accessible.
-3. State the project's character in two or three lines and the presentation direction that fits it. Get a quick read from the user when identity is genuinely open; otherwise proceed with a fitting default and show it.
-4. Propose the change set as a short plan before writing: which surfaces, what treatment, what stays untouched.
-5. Work on a branch. Add assets under a conventional path (`assets/`, `docs/`); show every file path before creating or modifying it. Never overwrite an existing asset or section without showing what is replaced.
-6. Keep every change presentational and evidence-backed. If a change touches source, build, or behavior, stop — out of scope.
-7. Verify: badges resolve, links work, Mermaid parses, images load, `<picture>` swaps in both themes, the README renders on GitHub without broken markup.
-8. Report what changed, before/after of key surfaces, and any outward-facing changes held for approval.
-
-## Approvals and safety
-
-Show every path before writing. Never push, and never change GitHub settings, description, topics, homepage, or social preview without explicit approval — those are outward-facing. Never publish or deploy. Ask before changing releases, versions, licenses, or public/private positioning. Local file changes may proceed on a branch; outward-facing metadata is proposed, then applied only on a clear yes. Preserve existing content: fold, restructure, and augment rather than delete, and surface anything you would replace.
+Use a real GitHub render or browser preview when practical. State exactly what could not be rendered or checked. Do not stage, commit, branch, or push unless the user asked.
 
 ## Output
 
-Report: the project character read, the presentation direction taken, files created or changed with paths, assets and badges added and verified, diagrams added, the `audit_repo.py` evidence used, and a separated list of proposed outward-facing metadata changes awaiting approval. End with optional further enhancements the user can take or leave — restraint over completeness.
-
-## Subagents
-
-`explorer` only when a large or unfamiliar repository needs mapping before its structure can be diagrammed honestly. Presentation work is otherwise single-agent.
+Report the presentation problem addressed, the direction taken, changed paths, verification performed, and any outward-facing proposals still awaiting approval. Mention skipped additions only when their omission may surprise the user.
