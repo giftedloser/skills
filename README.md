@@ -172,5 +172,3 @@ skills/
 New packs can be added later without changing how existing skills are installed or invoked.
 
 ---
-
-Built for people who would rather discover a bad assumption early than ship it confidently.
