@@ -108,6 +108,4 @@ skills/
 └── README.md
 ```
 
-New packs can be added later without changing how existing skills are installed or invoked.
 
----
