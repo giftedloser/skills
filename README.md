@@ -5,9 +5,9 @@
 ![Invocation](https://img.shields.io/badge/invocation-automatic%20%2B%20explicit-3974c6)
 [![License: MIT](https://img.shields.io/badge/license-MIT-c47716)](LICENSE)
 
-Ten Codex skills that do not write your product code. Two of them run before there is much to look at, one improves the repository itself, and the other seven read work you already did and tell you what they found.
+Ten Codex skills that read your work instead of writing it. Point one at a branch and it will run the app and see if the feature actually works, comb the diff for what the change broke, look for security holes, measure what is slow, check whether the UI holds up, or decide whether the thing is ready to ship. Two more run at the start, one to argue with the idea and one to set up the repo, and one cleans up how the repository presents itself.
 
-Each one stands alone. Install everything or just one pack, and call them when the work calls for it.
+Each stands alone. Install everything or just one pack, and call them when the work calls for it.
 
 ## Skills at a glance
 
