@@ -1,29 +1,13 @@
 # GiftedLoser's Skills
 
-
 ![Skills](https://img.shields.io/badge/skills-10-6d5dfc)
 ![Packs](https://img.shields.io/badge/packs-3-167d68)
 ![Invocation](https://img.shields.io/badge/invocation-automatic%20%2B%20explicit-3974c6)
 [![License: MIT](https://img.shields.io/badge/license-MIT-c47716)](LICENSE)
 
-GiftedLoser's Skills are a collection of personal Codex workflows. Project Start turns an uncertain idea into a well-formed project, Project Checks audits work already done, and Project Polish improves repository presentation and identity.
+Ten Codex skills that do not write your product code. Two of them run before there is much to look at, one improves the repository itself, and the other seven read work you already did and tell you what they found.
 
-Each skill is independent. Together they cover the full range from idea to release, but they are not a pipeline and are not meant to run as a sequence. Install the whole collection or only the pack you need, and invoke skills one at a time as the work calls for them.
-
-## Example Workflow
-
-![Project lifecycle from idea to release](assets/project-lifecycle.svg)
-
-Describe the result you want. Codex routes the narrowest applicable skill, and audit skills stay silent unless the request clearly asks for an audit. Explicit `$name` invocation remains available as an override. Audits never run as an automatic suite.
-
-## Packs
-
-| Pack | Skills | Purpose |
-|---|---|---|
-| [Project Start](packs/project-start/README.md) | `$new-idea`, `$project-init` | Challenge the idea, create an approved project handoff, and establish the repository safely |
-| [Project Checks](packs/project-checks/README.md) | Seven `$check-*` skills | Audit the change, behavior, implementation, security, performance, interface, and release |
-| [Project Polish](packs/project-polish/README.md) | `$repo-polisher` | Improve README clarity and repository identity with evidence-led, presentation-only changes |
-
+Each one stands alone. Install everything or just one pack, and call them when the work calls for it.
 
 ## Skills at a glance
 
@@ -40,30 +24,58 @@ Describe the result you want. Codex routes the narrowest applicable skill, and a
 | “Can I ship this?” | `$check-release` | A `GO`, `GO WITH RISKS`, `NO-GO`, or `unavailable` decision covering docs, versions, build, packaging, installation, upgrades, signing, and removal |
 | “Make this repository clearer and more credible.” | `$repo-polisher` | Focused README and repository presentation improvements grounded in evidence, including a no-change result when appropriate |
 
+## Packs
+
+| Pack | Skills | Purpose |
+|---|---|---|
+| [Project Start](packs/project-start/README.md) | `$new-idea`, `$project-init` | Challenge the idea, create an approved project handoff, and establish the repository safely |
+| [Project Checks](packs/project-checks/README.md) | Seven `$check-*` skills | Audit the change, behavior, implementation, security, performance, interface, and release |
+| [Project Polish](packs/project-polish/README.md) | `$repo-polisher` | Improve README clarity and repository identity with evidence-led, presentation-only changes |
+
+Prebuilt archives live in [`dist/`](dist/), one per pack plus `GiftedLoser-Skills-Complete.zip` for the whole collection.
+
+## What the checks will not do
+
+The seven `$check-*` skills are read-only. They open files, run the build, exercise the app, and take measurements, but they never edit, commit, push, publish, or deploy. Nothing they find gets quietly fixed on the way past.
+
+What comes back is the finding, the evidence behind it, and an honest label on it. Confirmed defects, likely risks, and verification gaps stay separate, and missing execution evidence lowers confidence instead of being written up as success. Each report ends with remediation instructions you can hand to whatever agent does the fixing.
+
+That separation also makes them safe to run in a subagent. A focused check can work on its own or in parallel without holding permission to change the project.
+
+## Example workflow
+
+![Project lifecycle from idea to release](assets/project-lifecycle.svg)
+
+This is one example, not a required order. Most changes never need the deeper checks, and running all of them on a color tweak is a waste. Pick what the scope actually calls for.
+
+## Invocation
+
+Describe the result you want. Codex routes the narrowest applicable skill, and audit skills stay quiet unless the request clearly asks for an audit. Explicit `$name` invocation is always available as an override. Audits never run as an automatic suite.
 
 ## The project handoff
 
-`$new-idea` reads existing conversations, notes, mockups, and project files before asking questions. It challenges the proposal honestly and may conclude that the project is strong, needs decisions, or should not be built yet.
+`$new-idea` reads existing conversations, notes, mockups, and project files before it asks you anything. It challenges the proposal honestly and may conclude that the project is strong, needs decisions, or should not be built yet.
 
-Its only project mutation is an approved `docs/PROJECT.md` with one status:
+Its only project mutation is an approved `docs/PROJECT.md` carrying one status:
 
-- `READY FOR PROJECT-INIT`
-- `NEEDS DECISIONS`
-- `DO NOT BUILD YET`
+| Status | Meaning |
+|---|---|
+| `READY FOR PROJECT-INIT` | The idea holds up. Readiness is recorded, but this does not authorize initialization or building. |
+| `NEEDS DECISIONS` | Open questions have to be answered first. |
+| `DO NOT BUILD YET` | The idea does not survive its own review. |
 
-`$project-init` looks for that handoff automatically. When present, it respects the status and uses the document as approved product intent while verifying technical claims against the repository. When absent, initialization behaves normally; `$new-idea` is always optional.
-
+`$project-init` looks for that handoff automatically. When it is there, it respects the status and treats the document as approved product intent while verifying every technical claim against the repository. When it is absent, initialization behaves normally. `$new-idea` is always optional.
 
 ## Operating model
 
-- `$new-idea` may create or update only `docs/PROJECT.md`.
-- `READY FOR PROJECT-INIT` records readiness but does not authorize initialization or building.
-- `$project-init` may establish or normalize the repository but never publishes without explicit authorization.
-- Every `$check-*` skill is audit-only and never repairs, commits, pushes, publishes, or deploys.
-- Audit skills require clear audit intent and never run as an automatic suite.
-- `$repo-polisher` handles repository presentation and identity, not product UI, code behavior, or release decisions. Its dependency-free Python scanner collects repeatable evidence; it never grades the repository or turns missing conventional files into automatic work.
-- Findings distinguish confirmed defects, likely risks, and verification gaps.
-- Missing execution evidence lowers confidence instead of being presented as success.
+| Skill | May change | Never does |
+|---|---|---|
+| `$new-idea` | `docs/PROJECT.md` only | Anything else in the project |
+| `$project-init` | Repository structure, tooling, Git hygiene | Publish without explicit authorization |
+| `$check-*` | Nothing | Repair, commit, push, publish, deploy, or run as an automatic suite |
+| `$repo-polisher` | README and repository presentation | Touch product UI, code behavior, or release decisions |
+
+`$repo-polisher` collects its evidence with a dependency-free Python scanner so results are repeatable. It does not grade the repository, and a missing conventional file is not automatically work worth doing.
 
 ## Repository layout
 
@@ -98,3 +110,6 @@ skills/
 └── README.md
 ```
 
+## License
+
+MIT. See [LICENSE](LICENSE).
