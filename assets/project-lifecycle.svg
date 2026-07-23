@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 810" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
   <title id="title">An example of how the skills could be used</title>
-  <desc id="desc">An example, not a strict sequence. Groundwork uses new-idea and project-init. Build is a fresh build or a new branch. After a branch, check-diff and check-code run on their own layer. From there the work either iterates through merge or moves to the deeper checks layer, and either spot can loop back to build for more work. When the work is done, the deeper checks feed check-release, then repo-polisher, then ship. The skills are independent and no order is required.</desc>
+  <desc id="desc">An example, not a strict sequence. Groundwork uses new-idea and project-init. Build is a fresh build or a new branch. After a branch, check-diff and check-code review the change. From there most work goes straight to merge, and only the changes that call for it drop into the deeper checks layer, where each skill is picked individually rather than run as a suite. Merge and the deeper checks can both loop back to build for more work, and both can move on to check-release, then repo-polisher, then ship. The skills are independent and no order is required.</desc>
   <style>
     text { font-family: Inter, ui-sans-serif, system-ui, sans-serif; fill: #20232a; text-anchor: middle; }
     .step, .skill { font-weight: 600; font-size: 16px; }
@@ -9,10 +9,12 @@
     .detail-sm { font-weight: 400; font-size: 11px; fill: #5d6470; }
     .sub { font-weight: 400; font-size: 14px; fill: #5d6470; }
     .group { font-weight: 700; font-size: 12px; fill: #5d6470; letter-spacing: 0.08em; }
+    .grouplight { font-weight: 500; font-size: 11px; fill: #7b828d; letter-spacing: 0.04em; }
     .edgelabel { font-weight: 600; font-size: 11px; fill: #737a86; letter-spacing: 0.03em; }
     .legend { font-weight: 500; font-size: 12px; fill: #5d6470; text-anchor: start; }
     .node { stroke-width: 2; }
     .blockbox { fill: none; stroke: #c7ccd4; stroke-width: 1.5; }
+    .optbox { fill: none; stroke: #c7ccd4; stroke-width: 1.5; stroke-dasharray: 7 5; }
     .phase { fill: #f4f4f5; stroke: #71717a; }
     .start { fill: #eeeafd; stroke: #6d5dfc; }
     .check { fill: #e7f6f1; stroke: #167d68; }
@@ -22,12 +24,13 @@
     .n-check { fill: #12705d; }
     .n-polish { fill: #a5620f; }
     .edge { fill: none; stroke: #737a86; stroke-width: 2; marker-end: url(#arrow); }
+    .stem { fill: none; stroke: #737a86; stroke-width: 2; }
     .loop { fill: none; stroke: #9aa0aa; stroke-width: 2; stroke-dasharray: 6 5; marker-end: url(#arrowL); }
     @media (prefers-color-scheme: dark) {
       text { fill: #f2f3f5; }
       .detail, .detail-sm, .group, .sub, .legend { fill: #bcc1ca; }
-      .edgelabel { fill: #aeb4bd; }
-      .blockbox { stroke: #565c66; }
+      .grouplight, .edgelabel { fill: #aeb4bd; }
+      .blockbox, .optbox { stroke: #565c66; }
       .phase { fill: #292a2f; stroke: #a1a1aa; }
       .start { fill: #302a50; stroke: #9b8cff; }
       .check { fill: #193d35; stroke: #46b596; }
@@ -36,7 +39,7 @@
       .n-start { fill: #b3a6ff; }
       .n-check { fill: #5cc7a8; }
       .n-polish { fill: #eab866; }
-      .edge { stroke: #aeb4bd; }
+      .edge, .stem { stroke: #aeb4bd; }
       .loop { stroke: #8a919b; }
     }
   </style>
@@ -49,12 +52,12 @@
     </marker>
   </defs>
 
-  <text class="sub" x="470" y="26">An example of how the skills could be used. They are independent, so pull in only what a moment needs.</text>
+  <text class="sub" x="450" y="26">One example of how these skills get used. They are independent, so pull in only what the moment calls for.</text>
 
   <!-- LEGEND -->
   <g>
     <rect class="node phase"  x="980" y="52"  width="18" height="18" rx="4"/>
-    <text class="legend" x="1006" y="66">Phase (not a skill)</text>
+    <text class="legend" x="1006" y="66">Phase, not a skill</text>
     <rect class="node start"  x="980" y="80"  width="18" height="18" rx="4"/>
     <text class="legend" x="1006" y="94">Project Start</text>
     <rect class="node check"  x="980" y="108" width="18" height="18" rx="4"/>
@@ -77,20 +80,17 @@
 
   <path class="edge" d="M220 108H250"/>
   <path class="edge" d="M435 108H465"/>
-
-  <!-- GROUNDWORK -> BUILD -->
   <path class="edge" d="M557 152V176H600V196"/>
 
   <!-- BUILD -->
   <rect class="node phase" x="500" y="196" width="200" height="84" rx="12"/>
   <text x="600" y="232"><tspan class="step n-phase" x="600">Build</tspan><tspan class="detail" x="600" dy="23">Fresh build or new branch</tspan></text>
 
-  <!-- BUILD -> BRANCH REVIEW -->
   <path class="edge" d="M600 280V316"/>
 
-  <!-- BRANCH REVIEW LAYER -->
+  <!-- BRANCH REVIEW -->
   <rect class="blockbox" x="360" y="316" width="480" height="130" rx="16"/>
-  <text class="group" x="600" y="337">BRANCH REVIEW</text>
+  <text class="group" x="600" y="338">BRANCH REVIEW</text>
 
   <rect class="node check" x="400" y="360" width="190" height="66" rx="12"/>
   <text x="495" y="389"><tspan class="skill n-check" x="495">$check-diff</tspan><tspan class="detail" x="495" dy="21">Regressions, hygiene</tspan></text>
@@ -99,56 +99,59 @@
   <text x="705" y="389"><tspan class="skill n-check" x="705">$check-code</tspan><tspan class="detail" x="705" dy="21">Correct, reliable</tspan></text>
 
   <!-- FORK -->
-  <path class="edge" d="M600 446V474H210V520"/>
-  <path class="edge" d="M600 446V474H700V496"/>
-  <text class="edgelabel" x="405" y="468">iterate</text>
-  <text class="edgelabel" x="648" y="468">when done</text>
+  <path class="stem" d="M600 446V478"/>
+  <path class="edge" d="M600 478H210V520"/>
+  <path class="edge" d="M600 478H700V496"/>
+  <text class="edgelabel" x="395" y="470">most changes go straight on</text>
+  <text class="edgelabel" x="706" y="470">only if this change calls for it</text>
 
   <!-- MERGE -->
   <rect class="node phase" x="120" y="520" width="180" height="96" rx="12"/>
   <text x="210" y="562"><tspan class="step n-phase" x="210">Merge</tspan><tspan class="detail" x="210" dy="23">Integrate the branch</tspan></text>
 
-  <!-- DEEPER CHECKS LAYER -->
-  <rect class="blockbox" x="440" y="496" width="520" height="168" rx="16"/>
-  <text class="group" x="700" y="516">DEEPER CHECKS  ·  ONLY WHEN THE SCOPE NEEDS IT</text>
+  <!-- DEEPER CHECKS (optional) -->
+  <rect class="optbox" x="440" y="496" width="520" height="174" rx="16"/>
+  <text class="group" x="700" y="518">OPTIONAL CHECKS</text>
+  <text class="grouplight" x="700" y="534">Pick one, pick none, never a suite. Scope decides.</text>
 
-  <rect class="node check" x="470" y="524" width="220" height="56" rx="11"/>
-  <text x="580" y="547"><tspan class="skill-sm n-check" x="580">$check-work</tspan><tspan class="detail-sm" x="580" dy="19">Real user workflows</tspan></text>
+  <rect class="node check" x="470" y="546" width="220" height="56" rx="11"/>
+  <text x="580" y="569"><tspan class="skill-sm n-check" x="580">$check-work</tspan><tspan class="detail-sm" x="580" dy="19">Real user workflows</tspan></text>
 
-  <rect class="node check" x="710" y="524" width="220" height="56" rx="11"/>
-  <text x="820" y="547"><tspan class="skill-sm n-check" x="820">$check-sec</tspan><tspan class="detail-sm" x="820" dy="19">Safe against threats</tspan></text>
+  <rect class="node check" x="710" y="546" width="220" height="56" rx="11"/>
+  <text x="820" y="569"><tspan class="skill-sm n-check" x="820">$check-sec</tspan><tspan class="detail-sm" x="820" dy="19">Safe against threats</tspan></text>
 
-  <rect class="node check" x="470" y="588" width="220" height="56" rx="11"/>
-  <text x="580" y="611"><tspan class="skill-sm n-check" x="580">$check-performance</tspan><tspan class="detail-sm" x="580" dy="19">Speed and scale</tspan></text>
+  <rect class="node check" x="470" y="610" width="220" height="56" rx="11"/>
+  <text x="580" y="633"><tspan class="skill-sm n-check" x="580">$check-performance</tspan><tspan class="detail-sm" x="580" dy="19">Speed and scale</tspan></text>
 
-  <rect class="node check" x="710" y="588" width="220" height="56" rx="11"/>
-  <text x="820" y="611"><tspan class="skill-sm n-check" x="820">$check-polish</tspan><tspan class="detail-sm" x="820" dy="19">Accessible, finished</tspan></text>
+  <rect class="node check" x="710" y="610" width="220" height="56" rx="11"/>
+  <text x="820" y="633"><tspan class="skill-sm n-check" x="820">$check-polish</tspan><tspan class="detail-sm" x="820" dy="19">Accessible, finished</tspan></text>
 
-  <!-- LOOP: MERGE -> BUILD (left rail) -->
-  <path class="loop" d="M210 616V648H40V236H500"/>
-  <text class="edgelabel" x="92" y="430">more work</text>
+  <!-- LOOP BACKS -->
+  <path class="loop" d="M210 616V656H40V238H500"/>
+  <text class="edgelabel" x="97" y="440">more work</text>
 
-  <!-- LOOP: DEEPER CHECKS -> BUILD (right rail) -->
-  <path class="loop" d="M960 552H1160V236H700"/>
-  <text class="edgelabel" x="1108" y="430">more work</text>
+  <path class="loop" d="M960 560H1160V238H700"/>
+  <text class="edgelabel" x="1103" y="440">more work</text>
 
-  <!-- DEEPER CHECKS -> RELEASE -->
-  <path class="edge" d="M700 664V682H540V704"/>
+  <!-- INTO RELEASE -->
+  <path class="edge" d="M700 670V686H470V714"/>
+  <path class="edge" d="M300 568H380V756H430"/>
+  <text class="edgelabel" x="384" y="690" style="text-anchor:start">work is done</text>
 
-  <!-- SHIP-OUT BAND -->
-  <text class="group" x="540"  y="694">RELEASE</text>
-  <text class="group" x="800"  y="694">PRE-SHIP POLISH</text>
-  <text class="group" x="1040" y="694">SHIP</text>
+  <!-- SHIP OUT -->
+  <text class="group" x="540"  y="704">RELEASE</text>
+  <text class="group" x="800"  y="704">PRE-SHIP POLISH</text>
+  <text class="group" x="1040" y="704">SHIP</text>
 
-  <rect class="node check" x="430" y="704" width="220" height="84" rx="12"/>
-  <text x="540" y="740"><tspan class="skill n-check" x="540">$check-release</tspan><tspan class="detail" x="540" dy="23">Docs, build, install, signing</tspan></text>
+  <rect class="node check" x="430" y="714" width="220" height="84" rx="12"/>
+  <text x="540" y="750"><tspan class="skill n-check" x="540">$check-release</tspan><tspan class="detail" x="540" dy="23">Docs, build, install, signing</tspan></text>
 
-  <rect class="node polish" x="700" y="704" width="200" height="84" rx="12"/>
-  <text x="800" y="740"><tspan class="skill n-polish" x="800">$repo-polisher</tspan><tspan class="detail" x="800" dy="23">README, badges, metadata</tspan></text>
+  <rect class="node polish" x="700" y="714" width="200" height="84" rx="12"/>
+  <text x="800" y="750"><tspan class="skill n-polish" x="800">$repo-polisher</tspan><tspan class="detail" x="800" dy="23">README, badges, metadata</tspan></text>
 
-  <rect class="node phase" x="950" y="704" width="180" height="84" rx="12"/>
-  <text x="1040" y="740"><tspan class="step n-phase" x="1040">Ship</tspan><tspan class="detail" x="1040" dy="23">Ship with evidence</tspan></text>
+  <rect class="node phase" x="950" y="714" width="180" height="84" rx="12"/>
+  <text x="1040" y="750"><tspan class="step n-phase" x="1040">Ship</tspan><tspan class="detail" x="1040" dy="23">Ship with evidence</tspan></text>
 
-  <path class="edge" d="M650 746H700"/>
-  <path class="edge" d="M900 746H950"/>
+  <path class="edge" d="M650 756H700"/>
+  <path class="edge" d="M900 756H950"/>
 </svg>
